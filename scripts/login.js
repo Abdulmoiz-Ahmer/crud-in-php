@@ -16,7 +16,7 @@ $(
                 },
                 password: {
                     required: "This field is required!",
-                    minlength: "Minimum 6 characters in this field!"
+                    minlength:"Minimum 6 characters required!"
                 }
             }, errorPlacement: function (error, element) {
                 if (element[0].name === "username") {
