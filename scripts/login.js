@@ -19,9 +19,6 @@ $(
                     minlength: "Minimum 6 characters in this field!"
                 }
             }, errorPlacement: function (error, element) {
-                // error.appendTo(element.parent("div").next());
-                console.log(element[0].name);
-
                 if (element[0].name === "username") {
                     $(".error-username").append(error);
                 } else {
