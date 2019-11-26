@@ -7,6 +7,7 @@
     
 .text-box
   display flex 
+  flex-wrap: wrap
   height unit(size*2.5,'rem')
   margin-top unit(size/0.9,'rem')
   align-items: baseline
@@ -17,7 +18,7 @@
     margin-left unit(size/5,'rem')
     margin-right unit(size/5,'rem')
     border none
-
+  
 .fields
     background-color middle-grey
     border none
@@ -25,11 +26,18 @@
     height unit(size*2.5,'rem')
     padding-left unit(size/8,'rem')
     color light-grey
+    
+    
 
 .login-btn
     height unit(size*3,'rem')
     margin-top unit(size/0.9,'rem')
 
 .fields:focus
-    outline none   
-  
+    outline-color: darken(middle-green,10%)
+
+.errors
+    color  dark-red
+    display block
+    text-align center
+    font-weight 400

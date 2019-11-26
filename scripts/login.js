@@ -1,20 +1,36 @@
 $(
-    function(){
-      $("form[name='login']").validate({
-          rules:{
-            username:{
-                required:true
+    function () {
+        $("form[name='login']").validate({
+            rules: {
+                username: {
+                    required: true
+                },
+                password: {
+                    required: true,
+                    minlength: 6
+                }
             },
-            password:{
-                required:true
-            }
-          },
-          messages:{
+            messages: {
+                username: {
+                    required: "This field is required!"
+                },
+                password: {
+                    required: "This field is required!",
+                    minlength: "Minimum 6 characters in this field!"
+                }
+            }, errorPlacement: function (error, element) {
+                // error.appendTo(element.parent("div").next());
+                console.log(element[0].name);
 
-          },
-          submitHandler: function(form){
-              form.submit();
-          }
-      })  
+                if (element[0].name === "username") {
+                    $(".error-username").append(error);
+                } else {
+                    $(".error-password").append(error);
+                }
+            },
+            submitHandler: function (form) {
+                form.submit();
+            }
+        })
     }
 );

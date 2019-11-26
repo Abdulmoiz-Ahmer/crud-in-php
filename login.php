@@ -19,12 +19,12 @@
                     <div class="icons-container"> <i class="fas fa-user"></i></div>
                     <div><input type="text" name="username" class="fields" placeholder=" Username"></div>
                 </div>
-
+                <span class="error-username errors"></span>
                 <div class="text-box">
                     <div class="icons-container"> <i class="fas fa-lock"></i></div>
                     <div><input type="password" name="password" class="fields" placeholder=" Password"></div>
                 </div>
-
+                <span class="error-password errors"></span>
                 <div>
                     <button class="btn login-btn" type="submit">Login</button>
                 </div>
@@ -35,6 +35,7 @@
     <script src="https://kit.fontawesome.com/a6575f5b2f.js" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/additional-methods.min.js"></script>
     <script src="scripts/login.js"></script>
 </body>
 
