@@ -1,4 +1,8 @@
-.container {
-  background-color: #31343c;
+.body {
+  background-color: #f00;
   height: 100vh;
+}
+* {
+  margin: 0;
+  padding: 0;
 }
