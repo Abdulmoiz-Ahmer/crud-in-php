@@ -16,13 +16,13 @@
             <form action="" method="post" name="login">
 
                 <div class="text-box">
-                    <div class="icons-container"> <i class="fas fa-user"></i></div>
-                    <div><input type="text" name="username" class="fields" placeholder=" Username"></div>
+                    <div class="icons-container"> <i class="fas fa-user icon"></i></div>
+                    <div class="field-container"><input type="text" name="username" class="fields" placeholder=" Username"></div>
                 </div>
                 <span class="error-username errors"></span>
                 <div class="text-box">
-                    <div class="icons-container"> <i class="fas fa-lock"></i></div>
-                    <div><input type="password" name="password" class="fields" placeholder=" Password"></div>
+                    <div class="icons-container"> <i class="fas fa-lock icon"></i></div>
+                    <div class="field-container"><input type="password" name="password" class="fields" placeholder=" Password"></div>
                 </div>
                 <span class="error-password errors"></span>
                 <div>
