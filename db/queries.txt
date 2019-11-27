@@ -91,15 +91,19 @@ delimiter //
 create procedure UserLogin(
 in username varchar(30),
 in pass varchar(64),
-out id int
+out id int,
+out type int
 )
 begin
-     set @uid = 7;
-     select userId into @uid from Users where userName = username and password = pass;  
-     set id = @uid;
+     select userId into id from Users where userName = username and password = pass;  
+     IF id IS NOT NULL THEN
+         select typeId into type from UsersRelation where userId = id;
+     END IF; 
 end //
 delimiter ;
 
 set @userid = -1;
-call UserLogin("manny","sjhksahdjdgh44d",@userid);
-select @userid
+set @usertype = -1;
+call UserLogin("manny","sjhksahdjdgh44d",@userid,@usertype);
+select @userid;
+select @usertype;
