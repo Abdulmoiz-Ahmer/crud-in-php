@@ -1,7 +1,6 @@
 //Database Creation
 create database Colleagues
 
-
 //Tables Creation
 create table Users(
 userId int unsigned auto_increment primary key,
@@ -13,7 +12,6 @@ create table Categories(
 categoryId int primary key,
 categoryName varchar(18) not null
 );
-
 
 create table Status(
 statusId int primary key,
@@ -43,7 +41,6 @@ foreign key (subCategoryId) references SubCategories(subCategoryId),
 foreign key (statusId) references Status(statusId),
 foreign key (typeId) references UsersTypes(typeId)
 );
-
 
 //Data insertion
 insert into Categories values(0,"IT");
