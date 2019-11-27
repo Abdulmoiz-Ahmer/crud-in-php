@@ -32,10 +32,10 @@ foreign key (categoryId) references Categories(categoryId)
 );
 
 create table UsersRelation(
-userId int unsigned,
-subCategoryId varchar(2),
-statusId int,
-typeId int,
+userId int unsigned not null,
+subCategoryId varchar(2) not null,
+statusId int not null,
+typeId int not null,
 foreign key (userId) references Users(userId),
 foreign key (subCategoryId) references SubCategories(subCategoryId),
 foreign key (statusId) references Status(statusId),
@@ -66,3 +66,40 @@ insert into Status values(2,"Inactive");
 
 insert into UsersTypes values(0,"Admin");
 insert into UsersTypes values(1,"User");
+
+//Stored Procedures
+delimiter //
+create procedure UserCreation(
+in username varchar(30),
+in pass varchar(64),
+in subcategory varchar(2),
+in statusid int,
+in typeid int
+)
+begin
+     insert into Users(userName,password)values(username,pass); 
+     set @userid := LAST_INSERT_ID();
+     insert into UsersRelation values(@userid,subcategory,statusid,typeid);
+      
+end //
+delimiter ;
+
+call UserCreation("manny","sjhksahdjdgh44d","0d",1,1);
+
+
+delimiter //
+create procedure UserLogin(
+in username varchar(30),
+in pass varchar(64),
+out id int
+)
+begin
+     set @uid = 7;
+     select userId into @uid from Users where userName = username and password = pass;  
+     set id = @uid;
+end //
+delimiter ;
+
+set @userid = -1;
+call UserLogin("manny","sjhksahdjdgh44d",@userid);
+select @userid
