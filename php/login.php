@@ -46,9 +46,9 @@ session_start();
                                     $_SESSION["userObj"] =  serialize($res);
                                     $res->getType() == 0 ? header("Location: admin.php") : header("Location: user.php");
                                 } else if ($res->getStatus() == 1) {
-                                    $user_error = "Account Suspended!<br/> Contact Admin";
+                                    $user_error = "Contact Admin: Account Suspended!";
                                 } else {
-                                    $user_error = "Account Inactive!<br/> Contact Admin";
+                                    $user_error = "Contact Admin: Account Inactive!";
                                 }
                             } else if (is_array($res) && count($res) < 1) {
                                 $user_error = "Either username or password is incorrect!";
