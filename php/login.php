@@ -77,7 +77,7 @@ session_start();
                 <div>
                     <button class="btn login-btn" type="submit">Login</button>
                 </div>
-                <span class="error-user errors"><?php echo $user_error ?></span>
+                <span class="error-user errors error--custom"><?php echo $user_error ?></span>
             </form>
         </div>
     </div>

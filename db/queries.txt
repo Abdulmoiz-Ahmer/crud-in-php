@@ -10,7 +10,8 @@ password varchar(64) not null
 
 create table Categories(
 categoryId int primary key,
-categoryName varchar(18) not null
+categoryName varchar(18) not null,
+parentId int default -1
 );
 
 create table Status(
@@ -23,42 +24,34 @@ typeId int primary key,
 typeValue varchar(5) not null
 );
 
-create table SubCategories(
-subCategoryId varchar(2) not null,
-subCategoryName varchar(18) not null,
-categoryId int not null,
-primary key (subCategoryId),
-foreign key (categoryId) references Categories(categoryId)
-);
-
 create table UsersRelation(
 userId int unsigned not null,
-subCategoryId varchar(2) not null,
+categoryId int not null,
 statusId int not null,
 typeId int not null,
 foreign key (userId) references Users(userId),
-foreign key (subCategoryId) references SubCategories(subCategoryId),
+foreign key (categoryId) references Categories(categoryId),
 foreign key (statusId) references Status(statusId),
 foreign key (typeId) references UsersTypes(typeId)
 );
 
 //Data insertion
-insert into Categories values(0,"IT");
-insert into Categories values(1,"Management");
-insert into Categories values(2,"Supporting Staff");
+insert into Categories values(0,"IT",-1);
+insert into Categories values(1,"Management",-1);
+insert into Categories values(2,"Supporting Staff",-1);
 
-insert into SubCategories values("0a","Data Engineer",0);
-insert into SubCategories values("0b","Designer",0);
-insert into SubCategories values("0c","Developer",0);
-insert into SubCategories values("0d","Software Engineer",0);
-insert into SubCategories values("0e","SEO Expert",0);
-insert into SubCategories values("1a","HR Manager",1);
-insert into SubCategories values("1b","Manager",1);
-insert into SubCategories values("1c","Product Designer",1);
-insert into SubCategories values("2a","Cleaning Staff",2);
-insert into SubCategories values("2b","Cook",2);
-insert into SubCategories values("2c","Guard",2);
-insert into SubCategories values("2d","Office Boy",2);
+insert into Categories values(3,"Data Engineer",0);
+insert into Categories values(4,"Designer",0);
+insert into Categories values(5,"Developer",0);
+insert into Categories values(6,"Software Engineer",0);
+insert into Categories values(7,"SEO Expert",0);
+insert into Categories values(8,"HR Manager",1);
+insert into Categories values(9,"Manager",1);
+insert into Categories values(10,"Product Designer",1);
+insert into Categories values(11,"Cleaning Staff",2);
+insert into Categories values(12,"Cook",2);
+insert into Categories values(13,"Guard",2);
+insert into Categories values(14,"Office Boy",2);
 
 insert into Status values(0,"Active");
 insert into Status values(1,"Delete");
@@ -66,3 +59,7 @@ insert into Status values(2,"Inactive");
 
 insert into UsersTypes values(0,"Admin");
 insert into UsersTypes values(1,"User");
+
+
+
+select Users.userId, UsersRelation.typeId, Categories.categoryName, Status.statusValue from (((Users join UsersRelation on UsersRelation.userId=Users.userId) join Categories on UsersRelation.categoryId=Categories.categoryId) join Status on UsersRelation.statusId=Status.statusId) where Users.userName = "ace" and Users.password = "123456" limit 1;
