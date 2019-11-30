@@ -22,17 +22,56 @@ session_start();
         include("MySql.php");
         $user = unserialize($_SESSION["userObj"]);
         $crud = new MySql();
-        if($user->getType()==1){
+        if ($user->getType() == 1) {
             header("Location: user.php");
         }
         ?>
 
-   
+        <div class="table-container">
+            <?php
+            if ($crud->create_instance() == "ok") {
+                $res = $crud->allUsersDataForAdmin(0, 10, 0);
+                if (is_array($res)) {
+                    if (count($res) > 0) {
+                        echo "<table class='table'>";
+                        echo "<thead class='table-head'>";
+                        echo "<tr><th colspan='4' class='row-head'>Employees</th></tr>";
+                        echo "<tr>";
+                        echo "<th class='row-head'>ID</th>";
+                        echo "<th class='row-head'>Name</th>";
+                        echo "<th class='row-head'>Occupation</th>";
+                        echo "<th class='row-head'>Account Status</th>";
+                        echo "</tr>";
+                        echo "</thead>";
+                        echo "<tbody>";
+                        foreach ($res as $row) {
+                            echo "<tr class='row'>";
+                            echo "<td class='cell'>" . $row["userId"] . "</td>";
+                            echo "<td class='cell'>" . $row["userName"] . "</td>";
+                            echo "<td class='cell'>" . $row["categoryName"] . "</td>";
+                            echo "<td class='cell'>" . $row["statusValue"] . "</td>";
+                            echo "</tr>";
+                        }
+                        echo "</tbody>";
+                        echo " </table>";
+                    }
+                } else {
+                    echo $res;
+                }
+            } else {
+                echo "Something Went Wrong!";
+            }
+            ?>
+        </div>
+
+
+
+
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/additional-methods.min.js"></script>
-   
+
 </body>
 
 </html>

@@ -38,6 +38,24 @@ class MySql
         }
     }
 
+    function allUsersDataForAdmin($offset,$limit,$type = 0)
+    {
+        try {
+            $stmt = $this->conn->prepare("select r.userId , u.userName , u.password , c.categoryName, s.statusValue  from (((UsersRelation r join Users u on u.userId = r.userId) join Categories c on r.categoryId=c.categoryId) join Status s on r.statusId=s.statusId) where r.typeId!=:typeId order by userId limit $offset, $limit");
+            $stmt->bindParam(":typeId", $type);
+            $stmt->execute();
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $result = $stmt->fetchAll();
+            if (count($result) > 0) {
+                return $result;
+            } else {
+                return $result;
+            }
+        } catch (PDOException $exp) {
+            return $exp;
+         }
+    }
+
     function login($name, $password)
     {
         try {
