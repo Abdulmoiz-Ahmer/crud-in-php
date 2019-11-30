@@ -88,11 +88,13 @@ body {
   display: flex;
   justify-content: center;
   margin: 0.9375rem;
+  color: #fff;
+}
+.table {
+  box-shadow: 2px 5px 5px 0px rgba(96,101,107,0.1);
 }
 .table-head {
-  background-color: #fff;
-  border: none;
-  border-collapse: collapse;
+  background-color: #2a2f35;
 }
 .row-head {
   padding: 0.625rem;
@@ -106,7 +108,6 @@ body {
 }
 .row {
   background-color: #60656b;
-  color: #2a2f35;
 }
 .container {
   position: absolute;

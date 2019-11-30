@@ -18,13 +18,13 @@ class MySql
         }
     }
 
-    function retreiveDataFromSimilarCategory($category, $status,$userId)
+    function retreiveDataFromSimilarCategory($category, $status, $userId)
     {
         try {
             $stmt = $this->conn->prepare("select u.userId,u.userName,c.categoryName,s.statusValue from (((Categories c join UsersRelation r on c.categoryId = r.categoryId) join Users u on r.userId = u.userId) join Status s on s.statusId = r.statusId ) where c.parentId = :parentId and s.statusId=:statusId and u.userId != :userId");
             $stmt->bindParam(':parentId', $category);
             $stmt->bindParam(':statusId', $status);
-            $stmt->bindParam(':userId',$userId);
+            $stmt->bindParam(':userId', $userId);
             $stmt->execute();
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $result = $stmt->fetchAll();
@@ -41,20 +41,34 @@ class MySql
     function login($name, $password)
     {
         try {
-            $stmt = $this->conn->prepare("select Users.userId as uid, UsersRelation.typeId as tid, UsersRelation.statusId as stid, UsersRelation.categoryId as sid,Categories.parentId as cid from ((Users join UsersRelation on UsersRelation.userId=Users.userId) join Categories on UsersRelation.categoryId=Categories.categoryId) where Users.userName = :userName and Users.password = :password limit 1");
+            $stmt = $this->conn->prepare("select userId, password from Users where userName = :userName;");
             $stmt->bindParam(':userName', $name);
-            $stmt->bindParam(':password', $password);
             $stmt->execute();
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $result = $stmt->fetchAll();
             if (count($result) > 0) {
-                $user = new UserObj($result[0]["uid"]);
-                $user->setStatus($result[0]["stid"]);
-                $user->setSubCategory($result[0]["sid"]);
-                $user->setType($result[0]["tid"]);
-                $user->setCategory($result[0]["cid"]);
-                $user->setUserName($name);
-                return $user;
+                if (password_verify($password, $result[0]["password"]) == 1) {
+                    $stmt = $this->conn->prepare("select UsersRelation.typeId as tid, UsersRelation.statusId as stid, UsersRelation.categoryId as sid,Categories.parentId as cid from UsersRelation join Categories on UsersRelation.categoryId=Categories.categoryId where UsersRelation.userId=:userId limit 1;");
+                    $stmt->bindParam(':userId', $result[0]["userId"]);
+                    $stmt->execute();
+                    $stmt->setFetchMode(PDO::FETCH_ASSOC);
+                    $UserData = $stmt->fetchAll();
+                    if (count($result > 0)) {
+                        $user = new UserObj($result[0]["userId"]);
+                        $user->setStatus($UserData[0]["stid"]);
+                        $user->setSubCategory($UserData[0]["sid"]);
+                        $user->setType($UserData[0]["tid"]);
+                        $user->setCategory($UserData[0]["cid"]);
+                        $user->setUserName($name);
+                        return $user;
+                    } else {
+                        $result = array();
+                        return $result;
+                    }
+                } else {
+                    $result = array();
+                    return $result;
+                }
             } else {
                 return $result;
             }
@@ -138,5 +152,3 @@ class UserObj
         return $this->typeId;
     }
 }
-
-?>

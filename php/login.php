@@ -40,7 +40,7 @@ session_start();
                     } else {
                         $crud = new Mysql();
                         if ($crud->create_instance() == "ok") {
-                            $res = $crud->login($username_value, $password_value);
+                            $res = $crud->login($username_value,$password_value);
                             if ($res instanceof UserObj) {
                                 if ($res->getStatus() == 0) {
                                     $_SESSION["userObj"] =  serialize($res);
