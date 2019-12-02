@@ -26,13 +26,17 @@ $stat_error = "";
         ini_set("display_errors", 1);
         error_reporting(E_ALL);
         require("MySql.php");
+        require("logging.php");
         $user = unserialize($_SESSION["userObj"]);
         $crud = new MySql();
         if ($user->getType() == 1) {
             header("Location: user.php");
         }
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            echo "its submitting";
+            $validator = new Validate2();
+                $resultName = $validator->proceed($_POST["username"]);
+                $resultName == "ok" ? $username_value = $validator->crossScriptingRemoval($_POST["username"]) : $name_error = $resultName;
+                $resultPass = $validator->proceed($_POST["password"]);
         }
         ?>
 

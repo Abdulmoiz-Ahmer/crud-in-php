@@ -15,9 +15,26 @@ class Validate
         return empty($data) ? "This field is required!" : "ok";
     }
 
-    function password_validity($data){
-        return strlen($data)<6?"Minimum 6 characters required!":"ok";
+    function password_validity($data)
+    {
+        return strlen($data) < 6 ? "Minimum 6 characters required!" : "ok";
     }
 }
 
-?>
+class Validate2 extends Validate
+{
+    function proceed($data)
+    {
+        return empty($data) ? "Required!" : "ok";
+    }
+
+    function password_validity($data)
+    {
+        parent::password_validity($data);
+    }
+
+    function dropdown_validity($data)
+    {
+        $data === "Select" ? "Required!" : "ok";
+    }
+}
