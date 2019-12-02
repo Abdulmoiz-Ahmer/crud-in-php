@@ -1,4 +1,4 @@
-$(
+$( 
     function () {
         $("form[name='login']").validate({
             rules: {
