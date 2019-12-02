@@ -1,51 +1,69 @@
-.container__form
-    border unit(size/2,'rem') light-grey
-    border-style solid none
-    background-color dark-grey-blue
-    padding unit(size,'rem')
-    width: 100%
+.container__form {
+    border: unit((size / 2), 'rem') light-grey;
+    border-style: solid none;
+    background-color: dark-grey-blue;
+    padding: unit(size, 'rem');
+    width: 100%;
+}
 
-.text-box
-    display flex 
-    background-color mid-dark-grey-blue
-    height unit(size*3,'rem')
-    margin-top unit(size/0.9,'rem')
-    align-items: baseline
+.text-box {
+    display: flex;
+    background-color: mid-dark-grey-blue;
+    height: unit(size * 3, 'rem');
+    margin-top: unit((size / 0.9), 'rem');
+    align-items: baseline;
+}
 
-.icon
-    margin 0
 
-.icons-container
-    flex .09
-    height 100%
-    padding: 0
-    padding-left unit(size/2,'rem')
-    padding-right unit(size/2,'rem')
-  
-.field-container
-    flex 1
-    background-color: white
-    height 100%
+.icon {
+    margin: 0;
+}
 
-.fields
-    width 100%
-    height 100%
-    background-color middle-grey
-    border none
-    border-left solid unit(size/7,'rem') light-grey
-    color light-grey
-    
-.login-btn
-    height unit(size*3,'rem')
-    margin-top unit(size/0.9,'rem')
+.icons-container {
+    flex: 0.09;
+    height: 100%;
+    padding: 0;
+    padding-left: unit((size / 2), 'rem');
+    padding-right: unit((size / 2), 'rem');
+}
 
-.fields:focus
-    outline-color darken(middle-green,10%)
+.field-container {
+    flex: 1;
+    background-color: white;
+    height: 100%;
+}
 
-.errors
-    display block
-    text-align center
-    font-weight 400
+.fields {
+    width: 100%;
+    height: 100%;
+    background-color: middle-grey;
+    border: none;
+    border-left: solid unit((size / 7), 'rem') light-grey;
+    color: light-grey;
+}
 
-.error--custom
-    margin-top unit(size/0.9,'rem')
+.login-btn {
+    background-color: dark-purple;
+    border-bottom-color: darken(dark-purple, 50%);
+}
+
+.login-btn:hover {
+    background-color: darken(dark-purple, 10%);
+}
+
+.login-btn:active {
+    border-bottom: unit((size / 5), 'rem') solid darken(dark-purple, 50%);
+}
+
+// .fields:focus {
+// outline-color: darken(middle-green, 10%);
+// }
+.errors {
+    display: block;
+    text-align: center;
+    font-weight: 400;
+}
+
+.error--custom {
+    margin-top: unit((size / 0.9), 'rem');
+}

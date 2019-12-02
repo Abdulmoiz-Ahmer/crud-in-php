@@ -18,6 +18,32 @@ class MySql
         }
     }
 
+    function fetchCategories()
+    {
+        try {
+            $stmt = $this->conn->prepare("select categoryId, categoryName from Categories");
+            $stmt->execute();
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $result = $stmt->fetchAll();
+            return $result;
+        } catch (PDOException $exp) {
+            return $exp;
+        }
+    }
+
+    function fetchStatuses()
+    {
+        try {
+            $stmt = $this->conn->prepare("select statusId,statusValue from Status");
+            $stmt->execute();
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $result = $stmt->fetchAll();
+            return $result;
+        } catch (PDOException $exp) {
+            return $exp;
+        }
+    }
+
     function retreiveDataFromSimilarCategory($category, $status, $userId)
     {
         try {
@@ -28,17 +54,13 @@ class MySql
             $stmt->execute();
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $result = $stmt->fetchAll();
-            if (count($result) > 0) {
-                return $result;
-            } else {
-                return $result;
-            }
+            return $result;
         } catch (PDOException $exp) {
             return $exp->getMessage();
         }
     }
 
-    function allUsersDataForAdmin($offset,$limit,$type = 0)
+    function allUsersDataForAdmin($offset, $limit, $type = 0)
     {
         try {
             $stmt = $this->conn->prepare("select r.userId , u.userName , u.password , c.categoryName, s.statusValue  from (((UsersRelation r join Users u on u.userId = r.userId) join Categories c on r.categoryId=c.categoryId) join Status s on r.statusId=s.statusId) where r.typeId!=:typeId order by userId limit $offset, $limit");
@@ -53,7 +75,7 @@ class MySql
             }
         } catch (PDOException $exp) {
             return $exp;
-         }
+        }
     }
 
     function login($name, $password)
@@ -109,10 +131,16 @@ class UserObj
     private $subcategory;
     private $category;
     private $name;
+    private $password;
 
     function __construct($userId)
     {
         $this->userId = $userId;
+    }
+
+    public function setPassword($password)
+    {
+        $this->password = $password;
     }
 
     public function setSubCategory($subcategory)
@@ -143,6 +171,11 @@ class UserObj
     public function getUserName()
     {
         return $this->name;
+    }
+
+    public function getPassword()
+    {
+        return $this->password;
     }
 
     public function getCategory()

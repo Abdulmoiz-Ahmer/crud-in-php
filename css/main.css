@@ -13,6 +13,20 @@ div {
 body {
   font-family: 'Poppins', sans-serif;
 }
+.btn {
+  display: block;
+  height: 1.875rem;
+  margin-top: 0.694444444444444rem;
+  color: #fff;
+  border: none;
+  border-bottom: 0.208333333333333rem solid #627324;
+  width: 100%;
+  border-radius: 0.208333333333333rem;
+  cursor: pointer;
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+  transition: all 0.3s;
+  outline: none;
+}
 .container__form {
   border: 0.3125rem #60656b;
   border-style: solid none;
@@ -51,11 +65,14 @@ body {
   color: #60656b;
 }
 .login-btn {
-  height: 1.875rem;
-  margin-top: 0.694444444444444rem;
+  background-color: #550a8a;
+  border-bottom-color: #2b0545;
 }
-.fields:focus {
-  outline-color: #abc749;
+.login-btn:hover {
+  background-color: #4c097c;
+}
+.login-btn:active {
+  border-bottom: 0.125rem solid #2b0545;
 }
 .errors {
   display: block;
@@ -64,25 +81,6 @@ body {
 }
 .error--custom {
   margin-top: 0.694444444444444rem;
-}
-.btn {
-  display: block;
-  background-color: #b6ce60;
-  color: #fff;
-  border: none;
-  border-bottom: 0.208333333333333rem solid #627324;
-  width: 100%;
-  border-radius: 0.208333333333333rem;
-  cursor: pointer;
-  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
-  transition: all 0.3s;
-  outline: none;
-}
-.btn:hover {
-  background-color: #abc749;
-}
-.btn:active {
-  border-bottom: 0.125rem solid #627324;
 }
 .table-container {
   display: flex;
@@ -108,6 +106,40 @@ body {
 }
 .row {
   background-color: #60656b;
+}
+.table-foot {
+  background-color: #2a2f35;
+}
+.btn--ud {
+  padding: 0 0.625rem;
+  border-radius: none;
+}
+.update-btn {
+  background-color: #b6ce60;
+  border-bottom-color: #627324;
+}
+.update-btn:hover {
+  background-color: #abc749;
+}
+.update-btn:active {
+  border-bottom: 0.125rem solid #627324;
+}
+.delete-btn {
+  background-color: #ff726f;
+  border-bottom-color: #b70400;
+}
+.delete-btn:hover {
+  background-color: #ff4e4a;
+}
+.delete-btn:active {
+  border-bottom: 0.125rem solid #b70400;
+}
+select.decorated {
+  background-color: #363b41;
+  border-color: #363b41;
+  color: #60656b;
+  height: 1.875rem;
+  width: 100%;
 }
 .container {
   position: absolute;
