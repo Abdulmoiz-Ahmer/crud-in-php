@@ -11,6 +11,9 @@ session_start();
     <title>Document</title>
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,700&display=swap" rel="stylesheet">
     <link href="../css/vendors/fontawesome-free-5.11.2-web/css/all.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript"></script>
+    <script src="../css/vendors/jquery.growl/javascripts/jquery.growl.js" type="text/javascript"></script>
+    <link href="../css/vendors/jquery.growl/stylesheets/jquery.growl.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="../css/main.css">
 
 </head>
@@ -23,7 +26,29 @@ session_start();
             error_reporting(E_ALL);
             require("logging.php");
             require("MySql.php");
-
+            if (isset($_SESSION["userObj"])) {
+                $user = unserialize($_SESSION["userObj"]);
+                if ($user->getType() == 1) {
+                    header("Location: user.php");
+                } else {
+                    header("Location: admin.php");
+                }
+            }
+            ?>
+            <script type="text/javascript">
+                var msg = "<?php echo isset($_SESSION['show_hello_message']) ? $_SESSION['show_hello_message'] : "null" ?>";
+                console.log(msg);
+                if (msg == 'logout') {
+                    $.growl.warning({
+                        title: "Logged Out",
+                        message: "Hope to see you again!"
+                    });
+                    msg = "<?php echo $_SESSION['show_hello_message'] = 'null'  ?>";
+                }
+                
+            </script>
+            <?php
+            $crud = new MySql();
             $name_error = "";
             $password_error = "";
             $user_error = "";
@@ -40,10 +65,12 @@ session_start();
                     } else {
                         $crud = new Mysql();
                         if ($crud->create_instance() == "ok") {
-                            $res = $crud->login($username_value,$password_value);
+                            $res = $crud->login($username_value, $password_value);
                             if ($res instanceof UserObj) {
                                 if ($res->getStatus() == 0) {
+
                                     $_SESSION["userObj"] =  serialize($res);
+                                    $_SESSION["show_hello_message"] = $username_value;
                                     $res->getType() == 0 ? header("Location: admin.php") : header("Location: user.php");
                                 } else if ($res->getStatus() == 1) {
                                     $user_error = "Contact Admin: Account Suspended!";

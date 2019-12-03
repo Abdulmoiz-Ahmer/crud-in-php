@@ -3,6 +3,11 @@
     border-radius: none;
 }
 
+.tab {
+    display: flex;
+    flex-direction: column;
+}
+
 .update-btn {
     background-color: middle-green;
     border-bottom-color: darken(middle-green, 50%);
@@ -26,6 +31,19 @@
 }
 
 .delete-btn:active {
+    border-bottom: unit((size / 5), 'rem') solid darken(light-red, 50%);
+}
+
+.logout-btn {
+    background-color: light-red;
+    border-bottom-color: darken(light-red, 50%);
+}
+
+.logout-btn:hover {
+    background-color: darken(light-red, 10%);
+}
+
+.logout-btn:active {
     border-bottom: unit((size / 5), 'rem') solid darken(light-red, 50%);
 }
 

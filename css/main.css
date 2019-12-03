@@ -114,6 +114,10 @@ body {
   padding: 0 0.625rem;
   border-radius: none;
 }
+.tab {
+  display: flex;
+  flex-direction: column;
+}
 .update-btn {
   background-color: #b6ce60;
   border-bottom-color: #627324;
@@ -132,6 +136,16 @@ body {
   background-color: #ff4e4a;
 }
 .delete-btn:active {
+  border-bottom: 0.125rem solid #b70400;
+}
+.logout-btn {
+  background-color: #ff726f;
+  border-bottom-color: #b70400;
+}
+.logout-btn:hover {
+  background-color: #ff4e4a;
+}
+.logout-btn:active {
   border-bottom: 0.125rem solid #b70400;
 }
 select.decorated {

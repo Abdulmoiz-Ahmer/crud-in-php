@@ -23,18 +23,34 @@ class Validate
 
 class Validate2 extends Validate
 {
-    function proceed($data)
+    function proceed2($data)
     {
         return empty($data) ? "Required!" : "ok";
     }
-
     function password_validity($data)
     {
         parent::password_validity($data);
     }
 
-    function dropdown_validity($data)
+    function dropdown_validity_category($data)
     {
-        $data === "Select" ? "Required!" : "ok";
+        if (!is_numeric($data))
+            return "Required!";
+        else if ($data >= 4 && $data <= 14)
+            return "ok";
+        else
+            return "Required!";
+    }
+
+
+    function dropdown_validity_status($data)
+    {
+        if (!is_numeric($data))
+            return "Required!";
+        else if ($data >= 0 && $data <= 2)
+            return "ok";
+
+        else
+            return "Required!";
     }
 }

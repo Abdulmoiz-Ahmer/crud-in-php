@@ -18,10 +18,75 @@ class MySql
         }
     }
 
+    function deleteRecord($userId)
+    {
+        try {
+            $stmt = $this->conn->prepare("update UsersRelation set statusId=1 where userId=:userId and typeId!=0");
+            $stmt->bindParam(":userId", $userId);
+            $stmt->execute();
+            return "User setted to delete status";
+        } catch (PDOException $exp) {
+            return $exp->getMessage();
+        }
+    }
+
+    function searchParticularRecord($userId, $typeId)
+    {
+        $stmt = $this->conn->prepare("select r.userId , u.userName , u.password , c.categoryName, s.statusValue  from (((UsersRelation r join Users u on u.userId = r.userId) join Categories c on r.categoryId=c.categoryId) join Status s on r.statusId=s.statusId) where r.typeId!=:typeId and u.userId=:userId");
+        $stmt->bindParam(":userId", $userId);
+        $stmt->bindParam(":typeId", $typeId);
+        $result = $stmt->execute();
+        return $result;
+    }
+
+    function insertRecord($name, $password, $category, $status)
+    {
+        try {
+            $stmt = $this->conn->prepare("select r.userId,r.statusId from Users u join UsersRelation r on u.userId=r.userId where userName =:userName and r.typeId!=0");
+            $stmt->bindParam(":userName", $name);
+            $stmt->execute();
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $result = $stmt->fetchAll();
+
+            if (is_array($result) && count($result) > 0 && $result[0]["statusId"] != 1) {
+                return "UserName already taken!";
+            } else if (is_array($result) && count($result) > 0 && $result[0]["statusId"] == 1) {
+                $stmt = $this->conn->prepare("update UsersRelation u set u.statusId=:statusId where userId=:userId;");
+                $stmt->bindParam(":userId", $result[0]["userId"]);
+                $statusId=0;
+                $stmt->bindParam(":statusId",$statusId);
+                $stmt->execute();
+                $stmt = $this->conn->prepare("update Users u set u.password=:password where userId=:userId;");
+                $stmt->bindParam(":userId", $result[0]["userId"]);
+                $password = password_hash($password, PASSWORD_BCRYPT);
+                $stmt->bindParam(":password", $password);
+                $stmt->execute();
+                return "Record Set To Active!";
+            } else {
+                $stmt = $this->conn->prepare("insert into Users (userName,password)values(:userName,:password);");
+                $stmt->bindParam(":userName", $name);
+                $password = password_hash($password, PASSWORD_BCRYPT);
+                $stmt->bindParam(":password", $password);
+                $stmt->execute();
+
+                $stmt = $this->conn->prepare("insert into UsersRelation values(:userId,:categoryId,:statusId,1);");
+                $userId = $this->conn->lastInsertId();
+                $stmt->bindParam(":userId", $userId);
+                $stmt->bindParam(":categoryId", $category);
+                $stmt->bindParam(":statusId", $status);
+                $stmt->execute();
+
+                return "Record Inserted!";
+            }
+        } catch (PDOException $exp) {
+            return $exp->getMessage();
+        }
+    }
+
     function fetchCategories()
     {
         try {
-            $stmt = $this->conn->prepare("select categoryId, categoryName from Categories");
+            $stmt = $this->conn->prepare("select categoryId, categoryName from Categories where parentId!=-1");
             $stmt->execute();
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $result = $stmt->fetchAll();
