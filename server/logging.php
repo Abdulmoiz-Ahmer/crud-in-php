@@ -1,5 +1,5 @@
 <?php
-
+require("session.php");
 class Validate
 {
     function crossScriptingRemoval($data)

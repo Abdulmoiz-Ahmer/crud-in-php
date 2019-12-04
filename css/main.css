@@ -114,6 +114,14 @@ body {
   padding: 0 0.625rem;
   border-radius: none;
 }
+.page-btn {
+  padding: 0 0.625rem;
+  border-bottom-color: #627324;
+  height: 1.875rem;
+  border-color: #627324;
+  border-bottom: 0.208333333333333rem solid #627324;
+  background-color: #b6ce60;
+}
 .tab {
   display: flex;
   flex-direction: column;

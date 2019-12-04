@@ -24,16 +24,11 @@ session_start();
             <?php
             ini_set("display_errors", 1);
             error_reporting(E_ALL);
+            require("my_sql.php");
             require("logging.php");
-            require("MySql.php");
-            if (isset($_SESSION["userObj"])) {
-                $user = unserialize($_SESSION["userObj"]);
-                if ($user->getType() == 1) {
-                    header("Location: user.php");
-                } else {
-                    header("Location: admin.php");
-                }
-            }
+            require("session.php");
+
+
             ?>
             <script type="text/javascript">
                 var msg = "<?php echo isset($_SESSION['show_hello_message']) ? $_SESSION['show_hello_message'] : "null" ?>";
@@ -45,7 +40,6 @@ session_start();
                     });
                     msg = "<?php echo $_SESSION['show_hello_message'] = 'null'  ?>";
                 }
-                
             </script>
             <?php
             $crud = new MySql();

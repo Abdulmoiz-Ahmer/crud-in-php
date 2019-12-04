@@ -1,4 +1,5 @@
 <?php
+require("session.php");
 class MySql
 {
     private $conn = "";
@@ -32,11 +33,65 @@ class MySql
 
     function searchParticularRecord($userId, $typeId)
     {
-        $stmt = $this->conn->prepare("select r.userId , u.userName , u.password , c.categoryName, s.statusValue  from (((UsersRelation r join Users u on u.userId = r.userId) join Categories c on r.categoryId=c.categoryId) join Status s on r.statusId=s.statusId) where r.typeId!=:typeId and u.userId=:userId");
+        $stmt = $this->conn->prepare("select r.userId , u.userName , u.password ,  r.categoryId,r.statusId  from UsersRelation r join Users u on u.userId = r.userId where r.typeId!=:typeId and u.userId=:userId");
         $stmt->bindParam(":userId", $userId);
         $stmt->bindParam(":typeId", $typeId);
-        $result = $stmt->execute();
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
         return $result;
+    }
+
+    function updateRecord($userId, $userName, $password, $category, $status)
+    {
+
+        try {
+            $stmt = $this->conn->prepare("select * from Users where userName =:userName and userId!=:userId");
+            $stmt->bindParam(":userName", $userName);
+            $stmt->bindParam(":userId", $userId);
+            $stmt->execute();
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $result = $stmt->fetchAll();
+            if (count($result) > 0) {
+                return "UserName Already Taken!";
+            } else {
+                $stmt = $this->conn->prepare("update Users u join UsersRelation r on u.userId = r.userId set u.userName =:userName, u.password=:password, r.categoryId =:categoryId, r.statusId=:statusId where u.userId=:userId;");
+                $stmt->bindParam(":userId", $userId);
+                $stmt->bindParam(":userName", $userName);
+                $password = password_hash($password, PASSWORD_BCRYPT);
+                $stmt->bindParam(":password", $password);
+                $stmt->bindParam(":statusId", $status);
+                $stmt->bindParam(":categoryId", $category);
+                $stmt->execute();
+                return "Records Updated Successfully";
+            }
+        } catch (PDOException $exp) {
+            return $exp->getMessage();
+        }
+        // try {
+        //     $stmt = $this->conn->prepare("select * from Users where userName =: userName and userId !=:userId");
+        //     $stmt->bindParam(":userId", $userId);
+        //     $stmt->bindParam(":userName", $userName);
+        //     $stmt->execute();
+        //     $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        //     $result = $stmt->fetchAll();
+        //     if (count($result) > 0) {
+        //         return "UserName Already Taken!";
+        //     } else {
+        //         return "Proceed";
+        //         // $stmt = $this->conn->prepare("update Users u join UsersRelation r on u.userId = r.userId set u.userName =:userName, u.password=:password, r.categoryId =:categoryId, r.statusId=:statusId where u.userId=:userId;");
+        //         // $stmt->bindParam(":userId", $Id);
+        //         // $stmt->bindParam(":userName", $name);
+        //         // $password = password_hash($password, PASSWORD_BCRYPT);
+        //         // $stmt->bindParam(":password", $password);
+        //         // $stmt->bindParam(":statusId", $status);
+        //         // $stmt->bindParam(":categoryId", $category);
+        //         // $stmt->execute();
+        //         // return "Records Updated Successfully";
+        //     }
+        // } catch (PDOException $exp) {
+        //     return $exp->getMessage()." ".$userId." ".$userName;
+        // }
     }
 
     function insertRecord($name, $password, $category, $status)
@@ -53,8 +108,8 @@ class MySql
             } else if (is_array($result) && count($result) > 0 && $result[0]["statusId"] == 1) {
                 $stmt = $this->conn->prepare("update UsersRelation u set u.statusId=:statusId where userId=:userId;");
                 $stmt->bindParam(":userId", $result[0]["userId"]);
-                $statusId=0;
-                $stmt->bindParam(":statusId",$statusId);
+                $statusId = 0;
+                $stmt->bindParam(":statusId", $statusId);
                 $stmt->execute();
                 $stmt = $this->conn->prepare("update Users u set u.password=:password where userId=:userId;");
                 $stmt->bindParam(":userId", $result[0]["userId"]);
@@ -125,7 +180,7 @@ class MySql
         }
     }
 
-    function allUsersDataForAdmin($offset, $limit, $type = 0)
+    function fetchAllRecordsOfUsers($limit, $offset, $type = 0)
     {
         try {
             $stmt = $this->conn->prepare("select r.userId , u.userName , u.password , c.categoryName, s.statusValue  from (((UsersRelation r join Users u on u.userId = r.userId) join Categories c on r.categoryId=c.categoryId) join Status s on r.statusId=s.statusId) where r.typeId!=:typeId order by userId limit $offset, $limit");
@@ -138,6 +193,25 @@ class MySql
             } else {
                 return $result;
             }
+        } catch (PDOException $exp) {
+            return $exp;
+        }
+    }
+
+    function totalRecords($type = 0)
+    {
+
+        try {
+
+            $stmt = $this->conn->prepare("select count(u.userId) as count from Users u join UsersRelation r on u.userId=r.userId where r.typeId!=:typeId;");
+            $stmt->bindParam(":typeId", $type);
+            $stmt->execute();
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $result = $stmt->fetchAll();
+            if (is_array($result) && count($result) > 0)
+                return $result[0]["count"];
+            else
+                return 0;
         } catch (PDOException $exp) {
             return $exp;
         }
@@ -199,6 +273,11 @@ class UserObj
     private $password;
 
     function __construct($userId)
+    {
+        $this->userId = $userId;
+    }
+
+    public function setId($userId)
     {
         $this->userId = $userId;
     }

@@ -21,15 +21,8 @@ session_start();
         <?php
         ini_set("display_errors", 1);
         error_reporting(E_ALL);
-        include("MySql.php");
-        if (isset($_SESSION["userObj"])) {
-            $user = unserialize($_SESSION["userObj"]);
-            if ($user->getType() != 1) {
-                header("Location: admin.php");
-            }
-        } else {
-            header("Location: login.php");
-        }
+        require("my_sql.php");
+        require("session.php");
         $crud = new MySql();
 
         ?>
@@ -49,7 +42,7 @@ session_start();
 
         if (isset($_POST["logout-btn"])) {
             unset($_SESSION["userObj"]);
-            
+
             // // session_destroy();
             $_SESSION['show_hello_message'] = 'logout';
             header("Location: login.php");
