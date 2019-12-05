@@ -25,14 +25,7 @@ session_start();
         require("session.php");
 
 
-        if (isset($_GET['pageno'])) {
-            $pageno = $_GET['pageno'];
-        } else {
-            $pageno = 1;
-        }
 
-        $limit = 10;
-        $offset = ($pageno - 1) * $limit;
         $crud = new MySql();
 
         ?>
@@ -67,29 +60,86 @@ session_start();
             <div class="table-container">
                 <?php
                 if ($crud->create_instance() == "ok") {
-                    $res = $crud->retreiveDataFromSimilarCategory($user->getCategory(), $user->getId());
-                    if (count($res) > 0) {
-                        echo "<table class='table'>";
-                        echo "<thead class='table-head'>";
-                        echo "<tr><th colspan='4' class='row-head'>Colleagues</th></tr>";
-                        echo "<tr>";
-                        echo "<th class='row-head'>ID</th>";
-                        echo "<th class='row-head'>Name</th>";
-                        echo "<th class='row-head'>Occupation</th>";
-                        echo "<th class='row-head'>Account Status</th>";
-                        echo "</tr>";
-                        echo "</thead>";
-                        echo "<tbody>";
-                        foreach ($res as $row) {
-                            echo "<tr class='row'>";
-                            echo "<td class='cell'>" . $row["userId"] . "</td>";
-                            echo "<td class='cell'>" . $row["userName"] . "</td>";
-                            echo "<td class='cell'>" . $row["categoryName"] . "</td>";
-                            echo "<td class='cell'>" . $row["statusValue"] . "</td>";
-                            echo "</tr>";
+                    // if (isset($_GET['pageno'])) {
+                    //     $pageno = $_GET['pageno'];
+                    // } else {
+                    //     $pageno = 1;
+                    // }
+                    $limit = 10;
+
+                    $result = $crud->countRecords($user->getCategory(), $user->getId());
+                    if (is_array($result) && count($result) > 0) {
+                        $rows = $result[0]["rows"];
+                        $total_pages = ceil($rows / $limit);
+                        if (isset($_GET['pageno'])) {
+                            if ($_GET['pageno'] < 1)
+                                $pageno = 1;
+                            else if ($_GET['pageno'] > $total_pages)
+                                $pageno = $total_pages;
+                            else
+                                $pageno = $_GET['pageno'];
+                        } else {
+                            $pageno = 1;
                         }
-                        echo "</tbody>";
-                        echo " </table>";
+
+                        $offset = ($pageno - 1) * $limit;
+
+                        $res = $crud->retreiveDataFromSimilarCategory($user->getCategory(), $user->getId(), $limit, $offset);
+                        if (is_array($res) && count($res) > 0) {
+                            echo "<table class='table'>";
+                            echo "<thead class='table-head'>";
+                            echo "<tr><th colspan='4' class='row-head'>Colleagues</th></tr>";
+                            echo "<tr>";
+                            echo "<th class='row-head'>Name</th>";
+                            echo "<th class='row-head'>Occupation</th>";
+                            echo "<th class='row-head'>Account Status</th>";
+                            echo "</tr>";
+                            echo "</thead>";
+                            echo "<tbody>";
+                            foreach ($res as $row) {
+                                echo "<tr class='row'>";
+                                echo "<td class='cell'>" . $row["userName"] . "</td>";
+                                echo "<td class='cell'>" . $row["categoryName"] . "</td>";
+                                echo "<td class='cell'>" . $row["statusValue"] . "</td>";
+                                echo "</tr>";
+                            }
+                            echo "</body>";
+                            echo "<tfoot>";
+
+                            ?>
+                            <td class="cell" colspan="3">
+                                <ul class="pagination">
+                                    <li class="<?php if ($pageno <= 1) {
+                                                                echo 'disabled';
+                                                            } ?>">
+                                        <a href="<?php if ($pageno <= 1) {
+                                                                    echo '#';
+                                                                } else {
+                                                                    echo "?pageno=" . ($pageno - 1);
+                                                                } ?>">Prev</a>
+                                    </li>
+                                    <?php
+                                                for ($i = 1; $i <= $total_pages; $i++) {
+                                                    echo "<li><a href='?pageno=$i'>$i</a></li>";
+                                                }
+                                                ?>
+                                    <li class="<?php if ($pageno >= $total_pages) {
+                                                                echo 'disabled';
+                                                            } ?>">
+                                        <a href="<?php if ($pageno >= $total_pages) {
+                                                                    echo '#';
+                                                                } else {
+                                                                    echo "?pageno=" . ($pageno + 1);
+                                                                } ?>">Next</a>
+                                    </li>
+                                </ul>
+                            </td>
+
+                <?php
+
+                            echo "</tfoot>";
+                            echo " </table>";
+                        }
                     }
                 } else {
                     echo "Something Went Wrong!";

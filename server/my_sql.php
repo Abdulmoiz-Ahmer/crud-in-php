@@ -164,13 +164,13 @@ class MySql
         }
     }
 
-    
 
 
-    function retreiveDataFromSimilarCategory($category, $userId)
+
+    function retreiveDataFromSimilarCategory($category, $userId, $limit, $offset)
     {
         try {
-            $stmt = $this->conn->prepare("select u.userId,u.userName,c.categoryName,s.statusValue from (((Categories c join UsersRelation r on c.categoryId = r.categoryId) join Users u on r.userId = u.userId) join Status s on s.statusId = r.statusId ) where c.parentId = :parentId and u.userId != :userId");
+            $stmt = $this->conn->prepare("select u.userName,c.categoryName,s.statusValue from (((Categories c join UsersRelation r on c.categoryId = r.categoryId) join Users u on r.userId = u.userId) join Status s on s.statusId = r.statusId ) where c.parentId = :parentId and u.userId != :userId and r.typeId!=0 limit $offset, $limit");
             $stmt->bindParam(':parentId', $category);
             $stmt->bindParam(':userId', $userId);
             $stmt->execute();
@@ -216,6 +216,21 @@ class MySql
                 return 0;
         } catch (PDOException $exp) {
             return $exp;
+        }
+    }
+
+    function countRecords($category, $userId)
+    {
+        try {
+            $stmt = $this->conn->prepare("select count(u.userId) as rows from ((Categories c join UsersRelation r on c.categoryId = r.categoryId) join Users u on r.userId = u.userId) where c.parentId = :parentId and u.userId != :userId");
+            $stmt->bindParam(':parentId', $category);
+            $stmt->bindParam(':userId', $userId);
+            $stmt->execute();
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $result = $stmt->fetchAll();
+            return $result;
+        } catch (PDOException $exp) {
+            return $exp->getMessage();
         }
     }
 

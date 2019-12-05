@@ -13,6 +13,18 @@ div {
 body {
   font-family: 'Poppins', sans-serif;
 }
+.pagination {
+  display: block;
+}
+.pagination li {
+  display: inline-block;
+  list-style: none;
+  margin-right: 0.625rem;
+}
+.pagination li a {
+  display: inline-block;
+  color: #60656b;
+}
 .btn {
   display: block;
   height: 1.875rem;
