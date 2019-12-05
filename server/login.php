@@ -27,9 +27,8 @@ session_start();
             require("my_sql.php");
             require("logging.php");
             require("session.php");
-
-
             ?>
+
             <script type="text/javascript">
                 var msg = "<?php echo isset($_SESSION['show_hello_message']) ? $_SESSION['show_hello_message'] : "null" ?>";
                 console.log(msg);
@@ -87,16 +86,16 @@ session_start();
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post" name="login">
                 <div class="text-box">
                     <div class="icons-container"> <i class="fas fa-user icon"></i></div>
-                    <div class="field-container"><input type="text" name="username" class="fields" placeholder=" Username"></div>
+                    <div class="field-container"><input type="text" name="username" id="username" class="fields" placeholder=" Username"></div>
                 </div>
                 <span class="error-username errors"><?php echo $name_error ?></span>
                 <div class="text-box">
                     <div class="icons-container"> <i class="fas fa-lock icon"></i></div>
-                    <div class="field-container"><input type="password" name="password" class="fields" placeholder=" Password"></div>
+                    <div class="field-container"><input type="password" name="password" id="password" class="fields" placeholder=" Password"></div>
                 </div>
                 <span class="error-password errors"><?php echo $password_error  ?></span>
                 <div>
-                    <button class="btn login-btn" type="submit">Login</button>
+                    <button class="btn login-btn" id="login-btn" type="submit">Login</button>
                 </div>
                 <span class="error-user errors error--custom"><?php echo $user_error ?></span>
             </form>

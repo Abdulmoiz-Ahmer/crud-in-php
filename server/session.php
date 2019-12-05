@@ -1,8 +1,6 @@
 <?php
-// require("userobj.php");
-// require("my_sql.php");
+
 if (isset($_SESSION["userObj"])) {
-    // $user = new UserObj();
     $user = unserialize($_SESSION["userObj"]);
     if ($user->getType() == 1 && basename($_SERVER['PHP_SELF'])!="user.php") {
         header("Location: user.php");

@@ -38,13 +38,6 @@ $buttonValue = "insert-btn";
         require("my_sql.php");
         require("logging.php");
         require("session.php");
-        // $totalpages = $_SESSION["pages"];
-        // if (isset($_SESSION["pages"])) {
-
-        //     for ($i = 1; $i <= $_SESSION["pages"]; $i++) {
-        //         echo "<button name='page_button' type='submit' value='$i'></button>";
-        //     }
-        // }
         ?>
 
         <script type="text/javascript">
@@ -162,14 +155,13 @@ $buttonValue = "insert-btn";
                 $_SESSION['show_hello_message'] = 'logout';
                 header("Location: login.php");
             } else if (isset($_POST["page_button"])) {
-                if($_POST["page_button"]<1){
-                    $_POST["page_button"]=1;
-                }else if($_POST["page_button"] >$_SESSION["pages"]){
-                    $_POST["page_button"]=$_SESSION["pages"];
+                if ($_POST["page_button"] < 1) {
+                    $_POST["page_button"] = 1;
+                } else if ($_POST["page_button"] > $_SESSION["pages"]) {
+                    $_POST["page_button"] = $_SESSION["pages"];
                 }
                 $_SESSION["currentPage"] = $_POST["page_button"];
-                
-             }
+            }
         }
 
 

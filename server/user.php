@@ -23,6 +23,16 @@ session_start();
         error_reporting(E_ALL);
         require("my_sql.php");
         require("session.php");
+
+
+        if (isset($_GET['pageno'])) {
+            $pageno = $_GET['pageno'];
+        } else {
+            $pageno = 1;
+        }
+
+        $limit = 10;
+        $offset = ($pageno - 1) * $limit;
         $crud = new MySql();
 
         ?>
@@ -51,22 +61,17 @@ session_start();
         <div>
             <div>
                 <form action="" method="post">
-                    <table class='table' style="width:100%;text-align:center;">
-                        <tr class="table-head">
-                            <th class='row-head'>Employees</th>
-                            <th><button name='logout-btn' class='btn logout-btn' value='' type='submit'>Log Out</button></th>
-                        </tr>
-                    </table>
+                    <?php require("../html/logoutbtn.html") ?>
                 </form>
             </div>
             <div class="table-container">
                 <?php
                 if ($crud->create_instance() == "ok") {
-                    $res = $crud->retreiveDataFromSimilarCategory($user->getCategory(), $status = 0, $user->getId());
+                    $res = $crud->retreiveDataFromSimilarCategory($user->getCategory(), $user->getId());
                     if (count($res) > 0) {
                         echo "<table class='table'>";
                         echo "<thead class='table-head'>";
-                        echo "<tr><th colspan='4' class='row-head'>Active Colleagues</th></tr>";
+                        echo "<tr><th colspan='4' class='row-head'>Colleagues</th></tr>";
                         echo "<tr>";
                         echo "<th class='row-head'>ID</th>";
                         echo "<th class='row-head'>Name</th>";
@@ -92,77 +97,6 @@ session_start();
                 ?>
 
             </div>
-
-        </div>
-
-        <div class="table-container">
-
-            <?php
-            if ($crud->create_instance() == "ok") {
-                $res = $crud->retreiveDataFromSimilarCategory($user->getCategory(), $status = 1, $user->getId());
-                if (count($res) > 0) {
-                    echo "<table class='table'>";
-                    echo "<thead class='table-head'>";
-                    echo "<tr><th colspan='4' class='row-head'>Deleted Colleagues</th></tr>";
-                    echo "<tr>";
-                    echo "<th class='row-head'>ID</th>";
-                    echo "<th class='row-head'>Name</th>";
-                    echo "<th class='row-head'>Occupation</th>";
-                    echo "<th class='row-head'>Account Status</th>";
-                    echo "</tr>";
-                    echo "</thead>";
-                    echo "<tbody>";
-                    foreach ($res as $row) {
-                        echo "<tr class='row'>";
-                        echo "<td class='cell'>" . $row["userId"] . "</td>";
-                        echo "<td class='cell'>" . $row["userName"] . "</td>";
-                        echo "<td class='cell'>" . $row["categoryName"] . "</td>";
-                        echo "<td class='cell'>" . $row["statusValue"] . "</td>";
-                        echo "</tr>";
-                    }
-                    echo "</tbody>";
-                    echo " </table>";
-                }
-            } else {
-                echo "Something Went Wrong!";
-            }
-            ?>
-
-
-
-        </div>
-
-        <div class="table-container">
-            <?php
-            if ($crud->create_instance() == "ok") {
-                $res = $crud->retreiveDataFromSimilarCategory($user->getCategory(), $status = 2, $user->getId());
-                if (count($res) > 0) {
-                    echo "<table class='table'>";
-                    echo "<thead class='table-head'>";
-                    echo "<tr><th colspan='4' class='row-head'>Inactive Colleagues</th></tr>";
-                    echo "<tr>";
-                    echo "<th class='row-head'>ID</th>";
-                    echo "<th class='row-head'>Name</th>";
-                    echo "<th class='row-head'>Occupation</th>";
-                    echo "<th class='row-head'>Account Status</th>";
-                    echo "</tr>";
-                    echo "</thead>";
-                    echo "<tbody>";
-                    foreach ($res as $row) {
-                        echo "<tr class='row'>";
-                        echo "<td class='cell'>" . $row["userId"] . "</td>";
-                        echo "<td class='cell'>" . $row["userName"] . "</td>";
-                        echo "<td class='cell'>" . $row["categoryName"] . "</td>";
-                        echo "<td class='cell'>" . $row["statusValue"] . "</td>";
-                        echo "</tr>";
-                    }
-                    echo "</tbody>";
-                    echo " </table>";
-                }
-            } else {
-                echo "Something Went Wrong!";
-            }
-            ?>
 
         </div>
     </div>

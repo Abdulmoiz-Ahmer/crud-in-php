@@ -7,10 +7,9 @@
     padding: 0 unit(size, 'rem');
     border-bottom-color: darken(middle-green, 50%);
     height: unit(size * 3, 'rem');
-    border-color:darken(middle-green, 50%);
+    border-color: darken(middle-green, 50%);
     border-bottom: unit((size / 3), 'rem') solid darken(middle-green, 50%);
     background-color: middle-green;
-   
 }
 
 .tab {
@@ -45,8 +44,24 @@
 }
 
 .logout-btn {
+    position: fixed;
+    right: unit(size, 'rem');
+    top: unit(size, 'rem');
+    display: block;
+    width: 100px;
+    height: 100px;
+    line-height: 80px;
+    border: 2px solid #f5f5f5;
+    border-radius: 50%;
+    color: #f5f5f5;
+    text-align: center;
+    text-decoration: none;
     background-color: light-red;
     border-bottom-color: darken(light-red, 50%);
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    outline: none;
 }
 
 .logout-btn:hover {

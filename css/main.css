@@ -26,6 +26,7 @@ body {
   box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
   transition: all 0.3s;
   outline: none;
+  cursor: pointer;
 }
 .container__form {
   border: 0.3125rem #60656b;
@@ -147,8 +148,24 @@ body {
   border-bottom: 0.125rem solid #b70400;
 }
 .logout-btn {
+  position: fixed;
+  right: 0.625rem;
+  top: 0.625rem;
+  display: block;
+  width: 100px;
+  height: 100px;
+  line-height: 80px;
+  border: 2px solid #f5f5f5;
+  border-radius: 50%;
+  color: #f5f5f5;
+  text-align: center;
+  text-decoration: none;
   background-color: #ff726f;
   border-bottom-color: #b70400;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  outline: none;
 }
 .logout-btn:hover {
   background-color: #ff4e4a;

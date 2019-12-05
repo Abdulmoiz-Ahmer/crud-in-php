@@ -164,12 +164,14 @@ class MySql
         }
     }
 
-    function retreiveDataFromSimilarCategory($category, $status, $userId)
+    
+
+
+    function retreiveDataFromSimilarCategory($category, $userId)
     {
         try {
-            $stmt = $this->conn->prepare("select u.userId,u.userName,c.categoryName,s.statusValue from (((Categories c join UsersRelation r on c.categoryId = r.categoryId) join Users u on r.userId = u.userId) join Status s on s.statusId = r.statusId ) where c.parentId = :parentId and s.statusId=:statusId and u.userId != :userId");
+            $stmt = $this->conn->prepare("select u.userId,u.userName,c.categoryName,s.statusValue from (((Categories c join UsersRelation r on c.categoryId = r.categoryId) join Users u on r.userId = u.userId) join Status s on s.statusId = r.statusId ) where c.parentId = :parentId and u.userId != :userId");
             $stmt->bindParam(':parentId', $category);
-            $stmt->bindParam(':statusId', $status);
             $stmt->bindParam(':userId', $userId);
             $stmt->execute();
             $stmt->setFetchMode(PDO::FETCH_ASSOC);

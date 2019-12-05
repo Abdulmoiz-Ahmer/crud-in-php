@@ -9,13 +9,14 @@ jQuery.validator.addMethod("CheckPassword", function (value, element) {
         return false;
     }
 }, "One uppercase, One lowercase and a no is required!");
+
 jQuery.validator.addMethod("CheckName", function (value, element) {
-    var regex = /^[a-zA-Z '.-]*$/;
+    var regex = /[^a-zA-Z]/;
     if (value.match(regex)) {
-        return true;
+        return false;
     }
     else {
-        return false;
+        return true;
     }
 }, 'Please enter a valid name.');
 
