@@ -53,9 +53,9 @@ $buttonValue = "insert-btn";
         <?php
         $crud = new MySql();
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
+            echo "submitted";
             if (isset($_POST["insert-btn"])) {
-                // echo "insert bottom";
+                echo "insert bottom";
                 $validator = new Validate2();
                 $resultName = $validator->proceed($_POST["username"]);
                 $resultName == "ok" ? $username_value = $validator->crossScriptingRemoval($_POST["username"]) : $name_error = $resultName;
@@ -85,6 +85,8 @@ $buttonValue = "insert-btn";
                 if ($resultName == ($resultCategory == ($resultStatuses == ($resultPass == "ok")))) {
                     if ($crud->create_instance() == "ok") {
                         $result = $crud->insertRecord($username_value, $password_value, $category_value, $status_value);
+                        var_dump($result);
+
                         $db_error = $result;
                     }
                 }
@@ -104,6 +106,11 @@ $buttonValue = "insert-btn";
                         $buttonValue = "update-btn-bottom";
                         // $updateId = $result[0]["userId"];
                         $_SESSION["updateId"] = $result[0]["userId"];
+                        echo "<script type='text/javascript'>
+                        $(document).ready(function() { 
+                                $(document).scrollTop($(document).height()); 
+                        });
+                     </script>";
                         // echo "updateIdHere:" . $updateId;
                     }
                     // var_dump($result);
@@ -154,14 +161,6 @@ $buttonValue = "insert-btn";
                 $_SESSION['show_hello_message'] = 'logout';
                 header("Location: login.php");
             }
-            //  else if (isset($_POST["page_button"])) {
-            //     if ($_POST["page_button"] < 1) {
-            //         $_POST["page_button"] = 1;
-            //     } else if ($_POST["page_button"] > $_SESSION["pages"]) {
-            //         $_POST["page_button"] = $_SESSION["pages"];
-            //     }
-            //     $_SESSION["currentPage"] = $_POST["page_button"];
-            // }
         }
 
 
@@ -174,12 +173,6 @@ $buttonValue = "insert-btn";
                 if ($total != 0) {
                     $limit = 10;
                     $pages = ceil($total / $limit);
-                    // $_SESSION["pages"] = $pages;
-                    // if (isset($_SESSION["currentPage"])) {
-                    //     $current_page = $_SESSION["currentPage"];
-                    // } else {
-                    //     $current_page = 1;
-                    // }
                     if (isset($_GET['pageno'])) {
                         if ($_GET['pageno'] < 1)
                             $current_page = 1;
@@ -191,8 +184,6 @@ $buttonValue = "insert-btn";
                         $current_page = 1;
                     }
                     $offset = ($current_page - 1)  * $limit;
-                    // $start = $offset + 1;
-                    // $end = min(($offset + $limit), $total);
                     $res = $crud->fetchAllRecordsOfUsers($limit, $offset, 0);
 
                     if (is_array($res)) {
@@ -201,9 +192,6 @@ $buttonValue = "insert-btn";
                             ?>
                             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post" name="admin">
                                 <?php require("../html/logoutbtn.html") ?>
-                                <!-- <td><button name='logout-btn' class='btn logout-btn' value='' type='submit'>Log Out</button></td> -->
-
-
                                 <table class="table">
                                     <thead class="table-head">
 
@@ -247,11 +235,11 @@ $buttonValue = "insert-btn";
                                     </tbody>
                                     <tfoot>
 
-                                        <tr class="row table-foot">
+                                        <tr class="row table-foot" id="bottom">
                                             <td class="cell">
                                                 <div class="text-box">
 
-                                                    <div class="field-container"><input type="text" name="username" class="fields" placeholder=" Username" value="<?php echo $updateName ?>"></div>
+                                                    <div class="field-container"><input id="username" type="text" name="username" class="fields" placeholder=" Username" value="<?php echo $updateName ?>"></div>
                                                 </div>
                                                 <span class="error-username errors"><?php echo $name_error ?></span>
 
@@ -262,7 +250,7 @@ $buttonValue = "insert-btn";
                                                 <div class="text-box">
 
                                                     <div class="field-container">
-                                                        <select class='decorated' name='categories'>
+                                                        <select class='decorated' name='categories' id="category-select">
                                                             <?php
                                                                             $categories = $crud->fetchCategories();
 
@@ -288,7 +276,7 @@ $buttonValue = "insert-btn";
                                                 <div class="text-box">
 
                                                     <div class="field-container">
-                                                        <select class='decorated' name='statuses'>
+                                                        <select class='decorated' name='statuses' id="status-select">
                                                             <?php
                                                                             $statuses = $crud->fetchStatuses();
 
@@ -315,13 +303,20 @@ $buttonValue = "insert-btn";
                                                 </div>
                                                 <span class="error-status errors"><?php echo $stat_error  ?></span>
                                             </td>
+
+
                                             <td class="cell">
+
+                                                <?php
+                                                                if ($buttonText == "Insert") {
+                                                                    echo '
                                                 <div class="text-box">
 
                                                     <div class="field-container"><input id="pass_field" type="password" name="password" class="fields" placeholder=" Password"></div>
                                                 </div>
-                                                <span class="error-password errors"><?php echo $password_error  ?></span>
-
+                                                <span class="error-password errors"><?php echo $password_error  ?></span>';
+                                                                }
+                                                                ?>
                                             </td>
 
                                             <td class="cell" colspan="2"> <button name="<?php echo $buttonValue  ?>" class='btn login-btn' type='submit' id='login-btn'><?php echo $buttonText ?></button></td>
@@ -385,7 +380,7 @@ $buttonValue = "insert-btn";
         <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/additional-methods.min.js"></script>
 
-        <script src="../scripts/login.js"></script>
+        <script src="../scripts/admin.js"></script>
 
 
 

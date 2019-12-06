@@ -1,7 +1,7 @@
 $(
     function () {
 
-        $("#password").keyup(function (e) {
+        $("input[name='password']").keyup(function (e) {
             if (!checkPasswordValidity(e.target.value))
                 $(".error-password").text("Please insert a valid password!");
             else
