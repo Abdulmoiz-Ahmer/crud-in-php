@@ -11,7 +11,6 @@ $db_error = "";
 $updateName = "";
 $updateCategory = "";
 $updateStatus = "";
-// $updateId = "";
 $buttonText = "Insert";
 $buttonValue = "insert-btn";
 ?>
@@ -154,14 +153,15 @@ $buttonValue = "insert-btn";
                 unset($_SESSION["userObj"]);
                 $_SESSION['show_hello_message'] = 'logout';
                 header("Location: login.php");
-            } else if (isset($_POST["page_button"])) {
-                if ($_POST["page_button"] < 1) {
-                    $_POST["page_button"] = 1;
-                } else if ($_POST["page_button"] > $_SESSION["pages"]) {
-                    $_POST["page_button"] = $_SESSION["pages"];
-                }
-                $_SESSION["currentPage"] = $_POST["page_button"];
             }
+            //  else if (isset($_POST["page_button"])) {
+            //     if ($_POST["page_button"] < 1) {
+            //         $_POST["page_button"] = 1;
+            //     } else if ($_POST["page_button"] > $_SESSION["pages"]) {
+            //         $_POST["page_button"] = $_SESSION["pages"];
+            //     }
+            //     $_SESSION["currentPage"] = $_POST["page_button"];
+            // }
         }
 
 
@@ -174,9 +174,19 @@ $buttonValue = "insert-btn";
                 if ($total != 0) {
                     $limit = 10;
                     $pages = ceil($total / $limit);
-                    $_SESSION["pages"] = $pages;
-                    if (isset($_SESSION["currentPage"])) {
-                        $current_page = $_SESSION["currentPage"];
+                    // $_SESSION["pages"] = $pages;
+                    // if (isset($_SESSION["currentPage"])) {
+                    //     $current_page = $_SESSION["currentPage"];
+                    // } else {
+                    //     $current_page = 1;
+                    // }
+                    if (isset($_GET['pageno'])) {
+                        if ($_GET['pageno'] < 1)
+                            $current_page = 1;
+                        else if ($_GET['pageno'] > $pages)
+                            $current_page = $pages;
+                        else
+                            $current_page = $_GET['pageno'];
                     } else {
                         $current_page = 1;
                     }
@@ -190,7 +200,8 @@ $buttonValue = "insert-btn";
 
                             ?>
                             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post" name="admin">
-
+                                <?php require("../html/logoutbtn.html") ?>
+                                <!-- <td><button name='logout-btn' class='btn logout-btn' value='' type='submit'>Log Out</button></td> -->
 
 
                                 <table class="table">
@@ -198,14 +209,7 @@ $buttonValue = "insert-btn";
 
                                         <tr>
                                             <th class="row-head" colspan='7'>
-                                                <table style="width:100%">
-                                                    <tr>
-                                                        <td> Employees</td>
-                                                        <td><button name='logout-btn' class='btn logout-btn' value='' type='submit'>Log Out</button></td>
-                                                    </tr>
-                                                </table>
-
-
+                                                Employee
                                             </th>
                                         </tr>
                                         <tr>
@@ -223,11 +227,18 @@ $buttonValue = "insert-btn";
                                                         foreach ($res as $row) {
                                                             echo "<tr class='row'>";
                                                             echo "<td class='cell'>" . $row["userName"] . "</td>";
-
                                                             echo "<td class='cell'>" . $row["categoryName"] . "</td>";
                                                             echo "<td class='cell'>" . $row["statusValue"] . "</td>";
-                                                            echo "<td class='cell'> <button name='update-btn' class='btn update-btn btn--ud' value='" . $row["userId"] . "' type='submit'>Update</button></td>";
-                                                            echo "<td class='cell'> <button name='delete-btn' class='btn delete-btn btn--ud' type='submit' value='" . $row["userId"] . "'>Delete</button></td>";
+                                                            if ($row["statusValue"] == "Active") {
+                                                                echo "<td class='cell'> <button name='update-btn' class='btn update-btn btn--ud' value='" . $row["userId"] . "' type='submit'>Update</button></td>";
+                                                                echo "<td class='cell'> <button name='delete-btn' class='btn delete-btn btn--ud' type='submit' value='" . $row["userId"] . "'>Delete</button></td>";
+                                                            } else if ($row["statusValue"] == "Inactive") {
+                                                                echo "<td class='cell'> <button name='update-btn' class='btn update-btn btn--ud' value='" . $row["userId"] . "' type='submit'>Update</button></td>";
+                                                                echo "<td class='cell' style=' text-decoration:  line-through;'>delete</td>";
+                                                            } else {
+                                                                echo "<td class='cell' style=' text-decoration:  line-through;'>update</td>";
+                                                                echo "<td class='cell' style=' text-decoration:  line-through;'>delete</td>";
+                                                            }
                                                             echo "</tr>";
                                                         }
 
@@ -322,18 +333,34 @@ $buttonValue = "insert-btn";
                                                 <?php echo $db_error ?>
                                             </td>
                                         </tr>
-                                        <tr class='row table-foot'>
-                                            <td colspan='7' class="cell pagination-container">
-                                                <?php
 
-                                                                $totalpages = $_SESSION["pages"];
-                                                                if (isset($_SESSION["pages"])) {
-
-                                                                    for ($i = 1; $i <= $_SESSION["pages"]; $i++) {
-                                                                        echo "<button name='page_button' type='submit' value='$i' class='page-btn'>$i</button>";
+                                        <tr class="row table-foot">
+                                            <td class="cell" colspan="5">
+                                                <ul class="pagination">
+                                                    <li class="<?php if ($current_page <= 1) {
+                                                                                    echo 'disabled';
+                                                                                } ?>">
+                                                        <a href="<?php if ($current_page <= 1) {
+                                                                                        echo '#';
+                                                                                    } else {
+                                                                                        echo "?pageno=" . ($current_page - 1);
+                                                                                    } ?>">Prev</a>
+                                                    </li>
+                                                    <?php
+                                                                    for ($i = 1; $i <= $pages; $i++) {
+                                                                        echo "<li><a href='?pageno=$i'>$i</a></li>";
                                                                     }
-                                                                }
-                                                                ?>
+                                                                    ?>
+                                                    <li class="<?php if ($current_page >= $pages) {
+                                                                                    echo 'disabled';
+                                                                                } ?>">
+                                                        <a href="<?php if ($current_page >= $pages) {
+                                                                                        echo '#';
+                                                                                    } else {
+                                                                                        echo "?pageno=" . ($current_page + 1);
+                                                                                    } ?>">Next</a>
+                                                    </li>
+                                                </ul>
                                             </td>
                                         </tr>
                                     </tfoot>
@@ -358,7 +385,7 @@ $buttonValue = "insert-btn";
         <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/additional-methods.min.js"></script>
 
-        <script src="../scripts/admin.js"></script>
+        <script src="../scripts/login.js"></script>
 
 
 
