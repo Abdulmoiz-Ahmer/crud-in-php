@@ -17,7 +17,11 @@ class Validate
 
     function password_validity($data)
     {
-        return strlen($data) < 6 ? "Minimum 6 characters required!" : "ok";
+        if (strlen($data) >= 6 && preg_match("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/", $data)) {
+            return "Please insert a valid password!!";
+        } else {
+            return "ok";
+        }
     }
 }
 

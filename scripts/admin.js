@@ -24,18 +24,25 @@ $(
     function () {
 
         $("#pass_field").keyup(function (e) {
-            if (!checkPasswordValidity(e.target.value))
-                $(".error-password").text("Please insert a valid password!");
-            else
+            if (e.target.value != "") {
+                if (e.target.value.length > 5 && !checkPasswordValidity(e.target.value))
+                    $(".error-password").text("Please insert a valid password!");
+                else
+                    $(".error-password").text("");
+            } else
                 $(".error-password").text("");
 
         });
 
         $("#username").keyup(function (e) {
-            if (e.target.value == "" || (!checkNameValidity(e.target.value)))
-                $(".error-username").text("Please insert a valid name!");
-            else
+            if (e.target.value != "") {
+                if (!checkNameValidity(e.target.value))
+                    $(".error-username").text("Please insert a valid name!");
+                else
+                    $(".error-username").text("");
+            } else
                 $(".error-username").text("");
+
         });
 
         $("#category-select").change(function (e) {
@@ -73,51 +80,78 @@ $(
         });
 
         $("#login-btn").click(function (e) {
-            e.preventDefault();
-            console.log($("#status-select").find(":selected").val());
 
-            if ($("#username").val() == "" || (!checkNameValidity($("#username").val())))
+            // var $this = $(this);
+            // console.log($("#status-select").find(":selected").val());
+
+            if ($("#username").val() == "" || (!checkNameValidity($("#username").val()))) {
                 $(".error-username").text("Please insert a valid name!");
+                return false;
+            }
             else {
                 if ($("#category-select").val() == '') {
                     $(".error-category").text("Please select a valid option");
+                    return false;
+
                 } else {
                     if ($("#category-select").val() >= 3 && $("#category-select").val() <= 14) {
-                        $(".error-category ").text("");
+                        // $(".error-category ").text("");
 
                         if ($("#status-select").val() != '') {
                             if ($("#login-btn").text() == "Insert") {
                                 if ($("#status-select").val() != 0 && $("#status-select").val() != 2) {
                                     $(".error-status").text("Please select a valid option");
+                                    return false;
+
                                 } else {
-                                    $(".error-status").text("");
-                                    password_checking();
+                                    // $(".error-status").text("");
+                                    if (!checkPasswordValidity($("#pass_field").val())) {
+                                        $(".error-password").text("Please insert a valid password!");
+                                        return false;
+                                    }
+
+                                    else {
+                                        // $("form[name='admin']").submit();
+                                        return true;
+                                    }
                                 }
                             } else if ($("#login-btn").text() == "Update") {
                                 if ($("#status-select").val() >= 0 && $("#status-select").val() <= 2) {
                                     $(".error-status").text("");
-                                    $("form[name='admin']").submit();
+                                    // $("form[name='admin']").submit();
+                                    return true;
 
                                     // password_checking();
                                 } else {
                                     $(".error-status").text("Please select a valid option");
+                                    return false;
+
                                 }
                             }
                         } else {
                             $(".error-status").text("Please select a valid option");
+                            return false;
+
                         }
                     } else {
                         $(".error-category").text("Please select a valid option");
+                        return false;
+
                     }
                 }
             }
         });
 
         function password_checking() {
-            if (!checkPasswordValidity($("#pass_field").val()))
+            if (!checkPasswordValidity($("#pass_field").val())) {
+
                 $(".error-password").text("Please insert a valid password!");
+                return false;
+            }
+
             else {
-                $("form[name='admin']").submit();
+                // $("form[name='admin']").submit();
+                return true;
             }
         }
 

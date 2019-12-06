@@ -42,7 +42,7 @@ class MySql
         return $result;
     }
 
-    function updateRecord($userId, $userName, $password, $category, $status)
+    function updateRecord($userId, $userName, $category, $status)
     {
 
         try {
@@ -55,11 +55,11 @@ class MySql
             if (count($result) > 0) {
                 return "UserName Already Taken!";
             } else {
-                $stmt = $this->conn->prepare("update Users u join UsersRelation r on u.userId = r.userId set u.userName =:userName, u.password=:password, r.categoryId =:categoryId, r.statusId=:statusId where u.userId=:userId;");
+                $stmt = $this->conn->prepare("update Users u join UsersRelation r on u.userId = r.userId set u.userName =:userName, r.categoryId =:categoryId, r.statusId=:statusId where u.userId=:userId;");
                 $stmt->bindParam(":userId", $userId);
                 $stmt->bindParam(":userName", $userName);
-                $password = password_hash($password, PASSWORD_BCRYPT);
-                $stmt->bindParam(":password", $password);
+                // $password = password_hash($password, PASSWORD_BCRYPT);
+                // $stmt->bindParam(":password", $password);
                 $stmt->bindParam(":statusId", $status);
                 $stmt->bindParam(":categoryId", $category);
                 $stmt->execute();

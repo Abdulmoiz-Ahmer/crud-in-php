@@ -2,23 +2,28 @@ $(
     function () {
 
         $("input[name='password']").keyup(function (e) {
-            if (!checkPasswordValidity(e.target.value))
-                $(".error-password").text("Please insert a valid password!");
-            else
+            if (e.target.value != "") {
+                if (e.target.value.length > 5 && !checkPasswordValidity(e.target.value))
+                    $(".error-password").text("Please insert a valid password!");
+                else
+                    $(".error-password").text("");
+            } else
                 $(".error-password").text("");
-
         });
 
         $("#username").keyup(function (e) {
-            if (e.target.value == "" || (!checkNameValidity(e.target.value)))
-                $(".error-username").text("Please insert a valid name!");
-            else
+            if (e.target.value != "") {
+                if (!checkNameValidity(e.target.value))
+                    $(".error-username").text("Please insert a valid name!");
+                else
+                    $(".error-username").text("");
+            } else
                 $(".error-username").text("");
         });
 
         $("#login-btn").click(function (e) {
             e.preventDefault();
-            console.log($("#username").val() == "" ? "yes" : "nos");
+            // console.log($("#username").val() == "" ? "yes" : "nos");
 
             if ($("#username").val() == "" || (!checkNameValidity($("#username").val())))
                 $(".error-username").text("Please insert a valid name!");
