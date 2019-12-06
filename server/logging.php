@@ -15,12 +15,21 @@ class Validate
         return empty($data) ? "This field is required!" : "ok";
     }
 
+    function name_validity($data)
+    {
+        if (preg_match("/[^a-zA-Z]/", $data)) {
+            return "Please insert a valid name!";
+        } else {
+            return "ok";
+        }
+    }
+
     function password_validity($data)
     {
         if (strlen($data) >= 6 && preg_match("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/", $data)) {
-            return "Please insert a valid password!!";
-        } else {
             return "ok";
+        } else {
+            return "Please insert a valid password!";
         }
     }
 }

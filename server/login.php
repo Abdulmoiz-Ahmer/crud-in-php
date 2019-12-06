@@ -47,38 +47,52 @@ session_start();
             $user_error = "";
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $validator = new Validate();
-                $resultName = $validator->proceed($_POST["username"]);
-                $resultName == "ok" ? $username_value = $validator->crossScriptingRemoval($_POST["username"]) : $name_error = $resultName;
-                $resultPass = $validator->proceed($_POST["password"]);
-                if ($resultPass == "ok") {
-                    $password_value = $validator->crossScriptingRemoval($_POST["password"]);
-                    $resultPass = $validator->password_validity($password_value);
-                    if ($resultPass != "ok") {
-                        $password_error = $resultPass;
-                    } else {
-                        $crud = new Mysql();
-                        if ($crud->create_instance() == "ok") {
-                            $res = $crud->login($username_value, $password_value);
-                            if ($res instanceof UserObj) {
-                                if ($res->getStatus() == 0) {
+                // $resultName = $validator->proceed($_POST["username"]);
+                // $resultName == "ok" ? $username_value = $validator->crossScriptingRemoval($_POST["username"]) : $name_error = $resultName;
 
-                                    $_SESSION["userObj"] =  serialize($res);
-                                    $_SESSION["show_hello_message"] = $username_value;
-                                    $res->getType() == 0 ? header("Location: admin.php") : header("Location: user.php");
-                                } else if ($res->getStatus() == 1) {
-                                    $user_error = "Contact Admin: Account Suspended!";
-                                } else {
-                                    $user_error = "Contact Admin: Account Inactive!";
-                                }
-                            } else if (is_array($res) && count($res) < 1) {
-                                $user_error = "Either username or password is incorrect!";
-                            }
-                        } else {
-                            echo "Something Went Wrong!";
-                        }
-                    }
+                if (($resultName = $validator->proceed($_POST["username"])) == "ok" && ($resultName = $validator->name_validity($validator->crossScriptingRemoval($_POST["username"]))) == "ok") {
+                    $username_value = $validator->crossScriptingRemoval($_POST["username"]);
+                } else {
+                    $name_error = $resultName;
+                }
+
+                // if (($resultPass = $validator->proceed($_POST["password"])) == "ok" && ($resultPass = $validator->password_validity($validator->crossScriptingRemoval($_POST["password"]))) == "ok") {
+                //     $resultPass = $validator->crossScriptingRemoval($_POST["password"]);
+                //     echo $resultPass;
+                // } else {
+                //     echo $resultPass;
+
+                //     $password_error = $resultPass;
+                // };
+                // echo $validator->password_validity($_POST["password"]);
+                if (($resultPass = $validator->proceed($_POST["password"])) == "ok"  && ($resultPass = $validator->password_validity($validator->crossScriptingRemoval($_POST["password"]))) == "ok") {
+                    $resultPass = $validator->crossScriptingRemoval($_POST["password"]);
                 } else {
                     $password_error = $resultPass;
+                }
+
+                if ($resultPass == "ok" && $resultName == "ok") {
+
+                    $crud = new Mysql();
+                    if ($crud->create_instance() == "ok") {
+                        $res = $crud->login($username_value, $password_value);
+                        if ($res instanceof UserObj) {
+                            if ($res->getStatus() == 0) {
+
+                                $_SESSION["userObj"] =  serialize($res);
+                                $_SESSION["show_hello_message"] = $username_value;
+                                $res->getType() == 0 ? header("Location: admin.php") : header("Location: user.php");
+                            } else if ($res->getStatus() == 1) {
+                                $user_error = "Contact Admin: Account Suspended!";
+                            } else {
+                                $user_error = "Contact Admin: Account Inactive!";
+                            }
+                        } else if (is_array($res) && count($res) < 1) {
+                            $user_error = "Either username or password is incorrect!";
+                        }
+                    } else {
+                        echo "Something Went Wrong!";
+                    }
                 }
             }
 
