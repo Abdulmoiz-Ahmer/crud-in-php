@@ -66,10 +66,11 @@ session_start();
                 // };
                 // echo $validator->password_validity($_POST["password"]);
                 if (($resultPass = $validator->proceed($_POST["password"])) == "ok"  && ($resultPass = $validator->password_validity($validator->crossScriptingRemoval($_POST["password"]))) == "ok") {
-                    $resultPass = $validator->crossScriptingRemoval($_POST["password"]);
+                    $password_value = $validator->crossScriptingRemoval($_POST["password"]);
                 } else {
                     $password_error = $resultPass;
                 }
+                // echo $resultName ." ".$resultPass;
 
                 if ($resultPass == "ok" && $resultName == "ok") {
 
@@ -77,7 +78,7 @@ session_start();
                     if ($crud->create_instance() == "ok") {
                         $res = $crud->login($username_value, $password_value);
                         if ($res instanceof UserObj) {
-                            if ($res->getStatus() == 0) {
+                            if ($res->getStatus() == 3) {
 
                                 $_SESSION["userObj"] =  serialize($res);
                                 $_SESSION["show_hello_message"] = $username_value;

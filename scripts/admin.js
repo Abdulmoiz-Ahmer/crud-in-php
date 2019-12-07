@@ -99,7 +99,7 @@ $(
 
                         if ($("#status-select").val() != '') {
                             if ($("#login-btn").text() == "Insert") {
-                                if ($("#status-select").val() != 0 && $("#status-select").val() != 2) {
+                                if ($("#status-select").val() != 2 && $("#status-select").val() != 3) {
                                     $(".error-status").text("Please select a valid option");
                                     return false;
 
@@ -116,7 +116,7 @@ $(
                                     }
                                 }
                             } else if ($("#login-btn").text() == "Update") {
-                                if ($("#status-select").val() >= 0 && $("#status-select").val() <= 2) {
+                                if ($("#status-select").val() >= 1 && $("#status-select").val() <= 3) {
                                     $(".error-status").text("");
                                     // $("form[name='admin']").submit();
                                     return true;

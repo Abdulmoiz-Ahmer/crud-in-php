@@ -88,45 +88,60 @@ $buttonValue = "insert-btn";
                 }
             } else if (isset($_POST["insert-btn"])) {
                 // echo "insert bottom";
+
+
                 $validator = new Validate2();
                 $resultName = $validator->proceed($_POST["username"]);
-                $resultName == "ok" ? $username_value = $validator->crossScriptingRemoval($_POST["username"]) : $name_error = $resultName;
-                $resultCategory = $validator->dropdown_validity_category($validator->crossScriptingRemoval($_POST["categories"]));
-                if ($resultCategory != "ok") {
-                    $category_error = $resultCategory;
+
+
+                if (($resultName = $validator->proceed($_POST["username"])) == "ok" && ($resultName = $validator->name_validity($validator->crossScriptingRemoval($_POST["username"]))) == "ok") {
+                    $username_value = $validator->crossScriptingRemoval($_POST["username"]);
                 } else {
-                    $category_value = $validator->crossScriptingRemoval($_POST["categories"]);
+                    $name_error = $resultName;
                 }
 
-
-                $resultStatuses = $validator->dropdown_validity_status($validator->crossScriptingRemoval($_POST["statuses"]));
-                if ($resultStatuses != "ok") {
-                    $stat_error = $resultStatuses;
+                if (($resultPass = $validator->proceed($_POST["password"])) == "ok"  && ($resultPass = $validator->password_validity($validator->crossScriptingRemoval($_POST["password"]))) == "ok") {
+                    $password_value = $validator->crossScriptingRemoval($_POST["password"]);
                 } else {
-                    $status_value = $validator->crossScriptingRemoval($_POST["statuses"]);
-                }
-
-
-                $resultPass = $validator->proceed($_POST["password"]);
-                $validator->crossScriptingRemoval($_POST["password"]);
-                $password_value = $validator->crossScriptingRemoval($_POST["password"]);
-                if ($resultPass != "ok") {
                     $password_error = $resultPass;
                 }
 
-                if ($resultName == ($resultCategory == ($resultStatuses == ($resultPass == "ok")))) {
+                if (($resultCategory = $validator->proceed($_POST["categories"])) == "ok" && ($resultCategory = $validator->dropdown_validity_category($validator->crossScriptingRemoval($_POST["categories"]))) == "ok") {
+                    $category_value = $validator->crossScriptingRemoval($_POST["categories"]);
+                } else {
+                    $category_error = $resultCategory;
+                }
+
+                if (($resultStatuses = $validator->proceed($_POST["statuses"])) == "ok" && ($resultStatuses = $validator->dropdown_validity_status($validator->crossScriptingRemoval($_POST["statuses"]), false)) == "ok") {
+                    $status_value = $validator->crossScriptingRemoval($_POST["statuses"]);
+                    // echo "here";
+                } else {
+                    // echo "hereeee";
+                    $stat_error = $resultStatuses;
+                }
+                // echo "status" . $_POST["statuses"] . "emptymsg" . $validator->proceed($_POST["statuses"]);
+
+
+
+
+                if ($resultName == "ok" && $resultCategory == "ok" && $resultStatuses == "ok" && $resultPass == "ok") {
                     if ($crud->create_instance() == "ok") {
                         $result = $crud->insertRecord($username_value, $password_value, $category_value, $status_value);
                         $db_error = $result;
-                        scrollToBottom();
                     }
                 }
+                scrollToBottom();
             } else if (isset($_POST["update-btn-bottom"])) {
                 echo "update bottom";
                 $validator = new Validate2();
                 $resultName = $validator->proceed($_POST["username"]);
-                $resultName == "ok" ? $username_value = $validator->crossScriptingRemoval($_POST["username"]) : $name_error = $resultName;
 
+
+                if (($resultName = $validator->proceed($_POST["username"])) == "ok" && ($resultName = $validator->name_validity($validator->crossScriptingRemoval($_POST["username"]))) == "ok") {
+                    $username_value = $validator->crossScriptingRemoval($_POST["username"]);
+                } else {
+                    $name_error = $resultName;
+                }
                 // $resultPass = $validator->proceed($_POST["password"]);
                 // $validator->crossScriptingRemoval($_POST["password"]);
                 // $password_value = $validator->crossScriptingRemoval($_POST["password"]);
@@ -135,22 +150,22 @@ $buttonValue = "insert-btn";
                 // }
 
 
-                $resultCategory = $validator->dropdown_validity_category($validator->crossScriptingRemoval($_POST["categories"]));
-                if ($resultCategory != "ok") {
-                    $category_error = $resultCategory;
-                } else {
+                if (($resultCategory = $validator->proceed($_POST["categories"])) == "ok" && ($resultCategory = $validator->dropdown_validity_category($validator->crossScriptingRemoval($_POST["categories"]))) == "ok") {
                     $category_value = $validator->crossScriptingRemoval($_POST["categories"]);
-                }
-
-                $resultStatuses = $validator->dropdown_validity_status($validator->crossScriptingRemoval($_POST["statuses"]));
-                if ($resultStatuses != "ok") {
-                    $stat_error = $resultStatuses;
                 } else {
+                    $category_error = $resultCategory;
+                }
+
+                if (($resultStatuses = $validator->proceed($_POST["statuses"])) == "ok" && ($resultStatuses = $validator->dropdown_validity_status($validator->crossScriptingRemoval($_POST["statuses"]), false)) == "ok") {
                     $status_value = $validator->crossScriptingRemoval($_POST["statuses"]);
+                    // echo "here";
+                } else {
+                    // echo "hereeee";
+                    $stat_error = $resultStatuses;
                 }
 
 
-                if ($resultName == ($resultCategory == ($resultStatuses == "ok"))) {
+                if ($resultName == "ok" && $resultCategory == "ok" && $resultStatuses == "ok") {
                     if ($crud->create_instance() == "ok") {
                         $result = $crud->updateRecord($_SESSION["updateId"], $username_value, $category_value, $status_value);
                         $db_error = $result;
@@ -320,7 +335,7 @@ $buttonValue = "insert-btn";
 
                                                     <div class="field-container"><input id="pass_field" type="password" name="password" class="fields" placeholder=" Password"></div>
                                                 </div>
-                                                <span class="error-password errors"><?php echo $password_error  ?></span>';
+                                                <span class="error-password errors">' . $password_error . '</span>';
                                                                 } else if ($buttonText == "Update") {
                                                                     echo "<button name='cancel-btn' class='btn delete-btn btn--ud' type='submit' id='cancel-btn'>Cancel</button>";
                                                                 }

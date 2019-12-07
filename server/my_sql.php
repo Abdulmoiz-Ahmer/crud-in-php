@@ -44,6 +44,7 @@ class MySql
 
     function updateRecord($userId, $userName, $category, $status)
     {
+        $userName =  strtolower($userName); 
 
         try {
             $stmt = $this->conn->prepare("select * from Users where userName =:userName and userId!=:userId");
@@ -96,8 +97,9 @@ class MySql
 
     function insertRecord($name, $password, $category, $status)
     {
+        $name =  strtolower($name); 
         try {
-            $stmt = $this->conn->prepare("select r.userId,r.statusId from Users u join UsersRelation r on u.userId=r.userId where userName =:userName and r.typeId!=0");
+            $stmt = $this->conn->prepare("select r.userId,r.statusId from Users u join UsersRelation r on u.userId=r.userId where userName =:userName");
             $stmt->bindParam(":userName", $name);
             $stmt->execute();
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -108,7 +110,7 @@ class MySql
             } else if (is_array($result) && count($result) > 0 && $result[0]["statusId"] == 1) {
                 $stmt = $this->conn->prepare("update UsersRelation u set u.statusId=:statusId where userId=:userId;");
                 $stmt->bindParam(":userId", $result[0]["userId"]);
-                $statusId = 0;
+                $statusId = 3;
                 $stmt->bindParam(":statusId", $statusId);
                 $stmt->execute();
                 $stmt = $this->conn->prepare("update Users u set u.password=:password where userId=:userId;");
@@ -163,9 +165,6 @@ class MySql
             return $exp;
         }
     }
-
-
-
 
     function retreiveDataFromSimilarCategory($category, $userId, $limit, $offset)
     {
@@ -236,6 +235,7 @@ class MySql
 
     function login($name, $password)
     {
+        $name =  strtolower($name); 
         try {
             $stmt = $this->conn->prepare("select userId, password from Users where userName = :userName;");
             $stmt->bindParam(':userName', $name);
