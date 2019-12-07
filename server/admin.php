@@ -132,7 +132,7 @@ $buttonValue = "insert-btn";
                 }
                 scrollToBottom();
             } else if (isset($_POST["update-btn-bottom"])) {
-                echo "update bottom";
+                // echo "update bottom";
                 $validator = new Validate2();
                 $resultName = $validator->proceed($_POST["username"]);
 

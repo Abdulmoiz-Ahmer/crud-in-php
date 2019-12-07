@@ -53,9 +53,9 @@ insert into Categories values(12,"Cook",2);
 insert into Categories values(13,"Guard",2);
 insert into Categories values(14,"Office Boy",2);
 
-insert into Status values(0,"Active");
 insert into Status values(1,"Delete");
 insert into Status values(2,"Inactive");
+insert into Status values(3,"Active");
 
 insert into UsersTypes values(0,"Admin");
 insert into UsersTypes values(1,"User");
