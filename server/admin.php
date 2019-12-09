@@ -8,14 +8,15 @@ require("session.php");
 
 
 
-function scrollToBottom()
-{
-    echo "<script type='text/javascript'>
-$(document).ready(function() { 
-$(document).scrollTop($(document).height()); 
-});
-</script>";
-}
+// function scrollToBottom()
+// {
+// //    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>';
+//     echo "<script type='text/javascript'>
+// $(document).ready(function() { 
+// $(document).scrollTop($(document).height()); 
+// });
+// </script>";
+// }
 
 $name_error = "";
 $password_error = "";
@@ -33,7 +34,7 @@ $crud = new MySql();
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (isset($_POST["delete-btn"])) {
-        // echo "triggered";
+        // echo "triggered " . $_POST["delete-btn"];
         if ($crud->create_instance() == "ok") {
             $result = $crud->deleteRecord($_POST["delete-btn"]);
             $db_error = $result;
@@ -96,7 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $db_error = $result;
             }
         }
-        scrollToBottom();
+        // scrollToBottom();
     } else if (isset($_POST["update-btn-bottom"])) {
         // echo "update bottom";
         $validator = new Validate2();
@@ -126,7 +127,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($crud->create_instance() == "ok") {
                 $result = $crud->updateRecord($_SESSION["updateId"], $username_value, $category_value, $status_value);
                 $db_error = $result;
-                scrollToBottom();
+                // scrollToBottom();
             }
         }
 
@@ -136,6 +137,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $buttonText = "Insert";
         $buttonValue = "insert-btn";
     } else if (isset($_POST["logout-btn"])) {
+        echo "logout";
         unset($_SESSION["userObj"]);
         $_SESSION['show_hello_message'] = 'logout';
         header("Location: login.php");
@@ -180,9 +182,10 @@ if ($crud->create_instance() == "ok") {
 
                         <div class="table-container">
 
-                            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post" name="admin">
-                                <?php require("../html/logoutbtn.html") ?>
+                            <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) . '?pageno=' . $_GET['pageno'] ?>" method="post" name="admin">
+
                                 <table class="table">
+                                    <?php require("../html/logoutbtn.html") ?>
                                     <thead class="table-head">
 
                                         <tr>
@@ -193,7 +196,6 @@ if ($crud->create_instance() == "ok") {
                                         <tr>
 
                                             <th class="row-head">Name</th>
-
                                             <th class="row-head">Occupation</th>
                                             <th class="row-head">Account Status</th>
                                             <th class="row-head" colspan="2">Operations</th>
@@ -212,7 +214,7 @@ if ($crud->create_instance() == "ok") {
                                                                     if ($row["statusValue"] == "Active") {
                                                                         ?>
                                                     <td class='cell'> <button name='update-btn' class='btn update-btn btn--ud' value='<?php echo $row["userId"] ?>' type='submit'>Update</button></td>
-                                                    <td class='cell'> <button name='delete-btn' onClick='return confirm("Are you sure you want to delete?")' class='btn delete-btn btn--ud' type='submit' value='<?php $row["userId"] ?>'>Delete</button></td>
+                                                    <td class='cell'> <button name='delete-btn' onClick='return confirm("Are you sure you want to delete?")' class='btn delete-btn btn--ud' type='submit' value='<?php echo $row["userId"] ?>'>Delete</button></td>
                                                 <?php
                                                                     } else if ($row["statusValue"] == "Inactive") { ?>
                                                     <td class='cell'> <button name='update-btn' class='btn update-btn btn--ud' value='<?php $row["userId"] ?>' type='submit'>Update</button></td>
@@ -309,15 +311,18 @@ if ($crud->create_instance() == "ok") {
 
                                                 <?php
                                                                 if ($buttonText == "Insert") {
-                                                                    
-                                                                    echo '
-                                                <div class="text-box">
+                                                                    ?>
 
-                                                    <div class="field-container"><input id="pass_field" type="password" name="password" class="fields" placeholder=" Password"></div>
-                                                </div>
-                                                <span class="error-password errors">' . $password_error . '</span>';
+                                                    <div class="text-box">
+
+                                                        <div class="field-container"><input id="pass_field" type="password" name="password" class="fields" placeholder=" Password"></div>
+                                                    </div>
+                                                    <span class="error-password errors"><?php $password_error ?></span>
+                                                <?php
                                                                 } else if ($buttonText == "Update") {
-                                                                    echo "<button name='cancel-btn' class='btn delete-btn btn--ud' type='submit' id='cancel-btn'>Cancel</button>";
+                                                                    ?>
+                                                    <button name='cancel-btn' class='btn delete-btn btn--ud' type='submit' id='cancel-btn'>Cancel</button>
+                                                <?php
                                                                 }
                                                                 ?>
                                             </td>

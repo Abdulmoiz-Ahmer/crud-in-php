@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     $_SESSION["userObj"] =  serialize($res);
                     $_SESSION["show_hello_message"] = $username_value;
-                    $res->getType() == 0 ? header("Location: admin.php") : header("Location: user.php");
+                    $res->getType() == 0 ? header("Location: admin.php?pageno=1") : header("Location: user.php?pageno=1");
                 } else if ($res->getStatus() == 1) {
                     $user_error = "Contact Admin: Account Suspended!";
                 } else {
