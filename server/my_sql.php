@@ -184,7 +184,7 @@ class MySql
     function fetchAllRecordsOfUsers($limit, $offset, $type = 0)
     {
         try {
-            $stmt = $this->conn->prepare("select r.userId , u.userName , u.password , c.categoryName, s.statusValue  from (((UsersRelation r join Users u on u.userId = r.userId) join Categories c on r.categoryId=c.categoryId) join Status s on r.statusId=s.statusId) where r.typeId!=:typeId order by userId limit $offset, $limit");
+            $stmt = $this->conn->prepare("select r.userId , u.userName , u.password , c.categoryName, s.statusValue  from (((UsersRelation r join Users u on u.userId = r.userId) join Categories c on r.categoryId=c.categoryId) join Status s on r.statusId=s.statusId) where r.typeId!=:typeId order by userId desc limit $offset, $limit");
             $stmt->bindParam(":typeId", $type);
             $stmt->execute();
             $stmt->setFetchMode(PDO::FETCH_ASSOC);

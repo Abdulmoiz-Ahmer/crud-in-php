@@ -63,6 +63,7 @@ $buttonValue = "insert-btn";
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if (isset($_POST["delete-btn"])) {
+                // echo "triggered";
                 if ($crud->create_instance() == "ok") {
                     $result = $crud->deleteRecord($_POST["delete-btn"]);
                     $db_error = $result;
@@ -240,7 +241,7 @@ $buttonValue = "insert-btn";
                                                             echo "<td class='cell'>" . $row["statusValue"] . "</td>";
                                                             if ($row["statusValue"] == "Active") {
                                                                 echo "<td class='cell'> <button name='update-btn' class='btn update-btn btn--ud' value='" . $row["userId"] . "' type='submit'>Update</button></td>";
-                                                                echo "<td class='cell'> <button name='delete-btn' class='btn delete-btn btn--ud' type='submit' value='" . $row["userId"] . "'>Delete</button></td>";
+                                                                echo "<td class='cell'> <button name='delete-btn' onClick='return confirm(\"Are you sure you want to delete?\")' class='btn delete-btn btn--ud' type='submit' value='" . $row["userId"] . "'>Delete</button></td>";
                                                             } else if ($row["statusValue"] == "Inactive") {
                                                                 echo "<td class='cell'> <button name='update-btn' class='btn update-btn btn--ud' value='" . $row["userId"] . "' type='submit'>Update</button></td>";
                                                                 echo "<td class='cell' style=' text-decoration:  line-through;'>delete</td>";

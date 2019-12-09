@@ -62,13 +62,13 @@ $(
         $("#status-select").change(function (e) {
             if ($(this).children("option:selected").val() != '') {
                 if ($("#login-btn").text() == "Insert") {
-                    if ($(this).children("option:selected").val() != 0 && $(this).children("option:selected").val() != 2) {
+                    if ($(this).children("option:selected").val() != 2 && $(this).children("option:selected").val() != 3) {
                         $(".error-status").text("Please select a valid option");
                     } else {
                         $(".error-status").text("");
                     }
                 } else if ($("#login-btn").text() == "Update") {
-                    if ($(this).children("option:selected").val() >= 0 && $(this).children("option:selected").val() <= 2) {
+                    if ($(this).children("option:selected").val() >= 1 && $(this).children("option:selected").val() <= 3) {
                         $(".error-status").text("");
                     } else {
                         $(".error-status").text("Please select a valid option");
