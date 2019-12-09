@@ -15,7 +15,7 @@ if (isset($_POST["logout-btn"])) {
 
 $crud = new MySql();
 if ($crud->create_instance() == "ok") {
-    $limit = 10;
+    $limit = 5;
 
     $result = $crud->countRecords($user->getCategory(), $user->getId());
     if (is_array($result) && count($result) > 0) {
@@ -94,12 +94,18 @@ if ($crud->create_instance() == "ok") {
                                                                         } else {
                                                                             echo "?pageno=" . ($pageno - 1);
                                                                         } ?>"><?php if ($pageno > 1) {
-                                                                                                echo "Prev";
-                                                                                            } ?></a>
+                                                                                                            echo "Prev";
+                                                                                                        } ?></a>
                                             </li>
                                             <?php
                                                         if ($total_pages > 5) {
-                                                            for ($i = $pageno; $i <= $total_pages; $i++) {
+                                                            if ($pageno + 5 > $total_pages) {
+                                                                $j = $total_pages;
+                                                            } else {
+                                                                $j = $pageno + 4;
+                                                            }
+
+                                                            for ($i = $pageno; $i <= $j; $i++) {
                                                                 echo "<li><a href='?pageno=$i'>$i</a></li>";
                                                             }
                                                         } else {
@@ -115,8 +121,8 @@ if ($crud->create_instance() == "ok") {
                                                                         } else {
                                                                             echo "?pageno=" . ($pageno + 1);
                                                                         } ?>"><?php if ($pageno != $total_pages) {
-                                                                                                echo "Next";
-                                                                                            } ?></a>
+                                                                                                            echo "Next";
+                                                                                                        } ?></a>
                                             </li>
                                         </ul>
                                     </td>
