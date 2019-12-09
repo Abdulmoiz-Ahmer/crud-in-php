@@ -117,9 +117,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if (($resultStatuses = $validator->proceed($_POST["statuses"])) == "ok" && ($resultStatuses = $validator->dropdown_validity_status($validator->crossScriptingRemoval($_POST["statuses"]), false)) == "ok") {
             $status_value = $validator->crossScriptingRemoval($_POST["statuses"]);
-            // echo "here";
         } else {
-            // echo "hereeee";
             $stat_error = $resultStatuses;
         }
 
@@ -127,7 +125,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($crud->create_instance() == "ok") {
                 $result = $crud->updateRecord($_SESSION["updateId"], $username_value, $category_value, $status_value);
                 $db_error = $result;
-                // scrollToBottom();
             }
         }
 
